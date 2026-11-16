@@ -67,6 +67,8 @@ class BatchRunner(Protocol):
 
 
 class Scheduler:
+    startup_timeout_seconds = 600
+
     def __init__(self, runner: BatchRunner, stop_token_ids: frozenset[int],
                  max_active: int = 8, max_queued: int = 64,
                  on_trace: Callable[[str, dict], None] | None = None,
@@ -95,7 +97,7 @@ class Scheduler:
 
     def start(self) -> None:
         self.thread.start()
-        if not self.ready.wait(timeout=600):
+        if not self.ready.wait(timeout=self.startup_timeout_seconds):
             raise RuntimeError("Batch runner startup timed out")
         if self.error is not None:
             raise RuntimeError("Batch runner failed to start") from self.error
