@@ -11,6 +11,7 @@ from transformers import AutoTokenizer
 
 from .generation_controls import model_eos_token_ids, request_stop_token_ids
 from .runtime_optimized import ModelRunner
+from .limits import DEFAULT_ACTIVE, MAX_ACTIVE
 from .model import BATCH
 from .schedule import RequestState
 from .schedule_optimized import Scheduler
@@ -34,9 +35,9 @@ class InferenceEngine:
     scheduler_class = None
 
     def __init__(self, model_root: Path, device_id: int,
-                 max_active: int = 2, prefix_cache: bool = False):
-        if not 1 <= max_active <= BATCH:
-            raise ValueError(f"max_active must be between 1 and the compiled batch capacity ({BATCH})")
+                 max_active: int = DEFAULT_ACTIVE, prefix_cache: bool = False):
+        if not 1 <= max_active <= MAX_ACTIVE:
+            raise ValueError(f"max_active must be between 1 and the compiled batch capacity ({MAX_ACTIVE})")
         if prefix_cache:
             raise ValueError("The optimized backend requires PREFIX_CACHE=0")
         self.model_root = model_root

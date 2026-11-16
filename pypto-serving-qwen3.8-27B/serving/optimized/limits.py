@@ -1,0 +1,5 @@
+from .model import BATCH
+
+DEFAULT_ACTIVE = 2
+MAX_ACTIVE = BATCH
+MAX_OUTPUT = 1536

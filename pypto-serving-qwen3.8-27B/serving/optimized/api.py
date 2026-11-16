@@ -18,6 +18,7 @@ from fastapi.responses import StreamingResponse
 from pydantic import BaseModel, ConfigDict, Field, StrictInt
 
 from serving.extensions import backend_factory
+from .limits import DEFAULT_ACTIVE, MAX_OUTPUT
 from .engine import MODEL_NAME, InferenceEngine
 
 
@@ -26,7 +27,7 @@ class CompletionInput(BaseModel):
     extensions: dict | None = None
     model: str = MODEL_NAME
     prompt: str | list[int]
-    max_tokens: int = Field(default=32, ge=1, le=1536)
+    max_tokens: int = Field(default=32, ge=1, le=MAX_OUTPUT)
     temperature: float = 0
     stream: bool = False
     stop: str | list[str] | None = None
@@ -45,7 +46,7 @@ class ChatInput(BaseModel):
     extensions: dict | None = None
     model: str = MODEL_NAME
     messages: list[ChatMessage] = Field(min_length=1)
-    max_tokens: int = Field(default=32, ge=1, le=1536)
+    max_tokens: int = Field(default=32, ge=1, le=MAX_OUTPUT)
     temperature: float = 0
     stream: bool = False
     stop: str | list[str] | None = None
@@ -81,7 +82,7 @@ async def lifespan(app: FastAPI):
         if os.environ.get(flag, "0") not in ("0", "1"):
             raise RuntimeError(f"{flag} must be 0 or 1")
     root = Path(os.environ["MODEL_ROOT"])
-    max_active = int(os.environ.get("MAX_ACTIVE", "2"))
+    max_active = int(os.environ.get("MAX_ACTIVE", str(DEFAULT_ACTIVE)))
     prefix_setting = os.environ.get("PREFIX_CACHE", "0")
     if prefix_setting not in ("0", "1"):
         raise RuntimeError("PREFIX_CACHE must be 0 or 1")
