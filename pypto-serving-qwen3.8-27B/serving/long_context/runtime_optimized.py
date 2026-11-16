@@ -76,13 +76,7 @@ class ModelRunner(base.ModelRunner):
             result[name] = torch.zeros(tuple(p['shape']), dtype=DTYPES[p['dtype']]).share_memory_()
         return result
 
-    def start(self):
-        if self.worker is not None:
-            raise RuntimeError('Model runner is already started')
-        if self.allow_prefix_hits:
-            raise ValueError('The optimized runner requires prefix_cache=False')
-        if self.config.any_dfx_enabled():
-            raise ValueError('Use the base runner for profiling modes')
+    def load_programs(self):
         specs_path = Path(__file__).with_name('kernels') / 'graph_specs.json'
         self.graph_specs = json.loads(specs_path.read_text())
         names = ['prefill_small16', 'prefill_wide64', 'prefill_chunk512',
@@ -90,6 +84,19 @@ class ModelRunner(base.ModelRunner):
         if self.enable_mixed_prefill:
             names += ['prefill_single128', 'mixed_ffn']
         self.programs = {n: compile_graph(n, self.graph_specs, self.config) for n in names}
+        return names
+
+    def additional_host_buffers(self):
+        return ()
+
+    def start(self):
+        if self.worker is not None:
+            raise RuntimeError('Model runner is already started')
+        if self.allow_prefix_hits:
+            raise ValueError('The optimized runner requires prefix_cache=False')
+        if self.config.any_dfx_enabled():
+            raise ValueError('Use the base runner for profiling modes')
+        names = self.load_programs()
         self.prefill = self.programs['prefill_small16']
         self.wide_prefill = self.programs['prefill_wide64']
         self.chunk512 = self.programs['prefill_chunk512']
@@ -110,6 +117,7 @@ class ModelRunner(base.ModelRunner):
         if self.enable_async_prepare:
             from .async_lookahead import allocate_host_banks
             inherited.extend(allocate_host_banks(self))
+        inherited.extend(self.additional_host_buffers())
         self.worker = DistributedWorker(list(self.programs.values()), config=self.config,
                                         inherited_host_tensors=tuple(inherited))
         self.banks, self.resident, self.state_scratch = [], [], []
@@ -129,8 +137,9 @@ class ModelRunner(base.ModelRunner):
             # The synchronous runner consumes the last logits before its next dispatch.
             # All prefill sizes and greedy decode may reuse the largest two output owners.
             self.outputs = {}
+            widest = max(self.host_fields, key=lambda name: self.host_fields[name]['ids'].shape[1])
             owners = [self._alloc(p['shape'], DTYPES[p['dtype']])
-                      for p in self.graph_specs['prefill_chunk512']['params'][34:36]]
+                      for p in self.graph_specs[widest]['params'][34:36]]
             for name in names:
                 if name.startswith('prefill_') or name == 'decode_greedy':
                     params = self.graph_specs[name]['params'][34:36]
@@ -243,12 +252,14 @@ class ModelRunner(base.ModelRunner):
             raise RuntimeError('Compact prefill requires one selected request')
         return name, self.host_fields[name], self.programs[name], self.outputs[name]
 
-    def _prepare(self, slots, fields, rows, *, decode_only=False):
+    def _prepare(self, slots, fields, rows, *, decode_only=False, mask_ready=False):
         tensors = tuple(fields[n] for n in FIELDS)
         if decode_only and self.async281 is not None and self.async281.consume_fields(slots, *tensors):
             return
         ids, cos, sin, masks, counts, offsets, tables = tensors
-        ids.zero_(); cos.fill_(1); sin.zero_(); masks.fill_(-10000)
+        ids.zero_(); cos.fill_(1); sin.zero_()
+        if not mask_ready:
+            masks.fill_(-10000)
         counts.zero_(); offsets.zero_(); tables.zero_()
         for index, slot in enumerate(slots):
             count, position = len(slot.token_ids), slot.position
@@ -266,7 +277,8 @@ class ModelRunner(base.ModelRunner):
                     self.cache, resident.pages, tables[index], self._decode_page_rows.get(slot.request.request_id))
             else:
                 ids[index, :count] = torch.tensor(slot.token_ids, dtype=torch.int32)
-                masks[index] = self._mask(count, position, rows)
+                if not mask_ready:
+                    masks[index] = self._mask(count, position, rows)
                 tables[index] = self.cache.table(resident.pages)
             cos[index, :count] = self.rope['cos'][position:position + count]
             sin[index, :count] = self.rope['sin'][position:position + count]
