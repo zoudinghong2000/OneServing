@@ -24,7 +24,7 @@ class BackendTests(unittest.TestCase):
         optimized = types.ModuleType(package.__name__ + '.optimized')
         optimized.__path__ = [str(ROOT / 'serving/optimized')]
         modules = {package.__name__: package, optimized.__name__: optimized}
-        for suffix in ('optimized.api', 'api_legacy'):
+        for suffix in ('optimized.api', 'long_context.api', 'api_legacy'):
             module = types.ModuleType(package.__name__ + '.' + suffix)
             module.app = suffix
             modules[module.__name__] = module
@@ -36,6 +36,7 @@ class BackendTests(unittest.TestCase):
         for backend, tp, dp, expected in (
             ('auto', '1', '1', 'optimized.api'),
             ('optimized', '1', '1', 'optimized.api'),
+            ('long-context', '1', '1', 'long_context.api'),
             ('legacy', '1', '1', 'api_legacy'),
             ('auto', '2', '1', 'api_legacy'),
             ('auto', '1', '2', 'api_legacy')):
@@ -44,6 +45,7 @@ class BackendTests(unittest.TestCase):
 
     def test_unsupported_and_inert_options_rejected(self):
         for options in (dict(backend='unknown'), dict(backend='optimized', tp='2'),
+                        dict(backend='long-context', dp='2'),
                         dict(backend='legacy', PYPTO_MIXED_PREFILL='1'),
                         dict(backend='auto', dp='2', PYPTO_ASYNC_PREPARE='1')):
             with self.subTest(options=options), self.assertRaises(RuntimeError):

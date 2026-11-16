@@ -3,7 +3,7 @@ set -euo pipefail
 
 usage() {
   cat <<'EOF'
-Usage: ./run.sh --model-root PATH --tp N --ep N --dp N [--host HOST --port PORT --devices IDS --max-active N --backend auto|optimized|legacy --mixed-prefill 0|1 --async-prepare 0|1]
+Usage: ./run.sh --model-root PATH --tp N --ep N --dp N [--host HOST --port PORT --devices IDS --max-active N --backend auto|optimized|long-context|legacy --mixed-prefill 0|1 --async-prepare 0|1]
 
 Use --devices 0,1 or set TASK_DEVICE to the assigned device IDs. EP must be 1.
 Supported topologies: TP=1 DP=1, TP=2 DP=1, TP=1 DP=2.
@@ -17,7 +17,7 @@ dp=1
 host=127.0.0.1
 port=8000
 devices="${TASK_DEVICE:-0}"
-max_active="${MAX_ACTIVE:-2}"
+max_active="${MAX_ACTIVE:-}"
 backend="${PYPTO_BACKEND:-auto}"
 mixed_prefill="${PYPTO_MIXED_PREFILL:-0}"
 async_prepare="${PYPTO_ASYNC_PREPARE:-0}"
@@ -60,13 +60,19 @@ if [[ ! "$port" =~ ^[0-9]+$ ]] || ((port < 1 || port > 65535)); then
   echo "--port must be between 1 and 65535" >&2
   exit 2
 fi
+if [[ "$backend" == long-context ]]; then
+  max_active="${max_active:-1}"
+  if [[ "$max_active" != 1 ]]; then echo "--backend long-context requires --max-active 1" >&2; exit 2; fi
+else
+  max_active="${max_active:-2}"
+fi
 if [[ ! "$max_active" =~ ^[0-9]+$ ]] || ((max_active < 1 || max_active > 8)); then
   echo "--max-active must be between 1 and 8" >&2
   exit 2
 fi
 case "$backend" in
-  auto|optimized|legacy) ;;
-  *) echo "--backend must be auto, optimized, or legacy" >&2; exit 2 ;;
+  auto|optimized|long-context|legacy) ;;
+  *) echo "--backend must be auto, optimized, long-context, or legacy" >&2; exit 2 ;;
 esac
 if [[ ! "$mixed_prefill" =~ ^[01]$ || ! "$async_prepare" =~ ^[01]$ ]]; then
   echo "--mixed-prefill and --async-prepare must be 0 or 1" >&2

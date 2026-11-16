@@ -14,7 +14,7 @@ provider 的构造参数为 `(model_root, device_id, max_active=..., prefix_cach
 ```bash
 # 进入 pypto-serving-qwen3.8-27B，使用 PyPTO 运行环境。
 export MODEL_ROOT=/path/to/full/Qwen3.8-27B MAX_ACTIVE=1 PREFIX_CACHE=0
-python -m uvicorn serving.long_context.api:app --port 18082
+./run.sh --backend long-context --model-root "$MODEL_ROOT" --devices 0 --port 18082
 # 安装外部 wheel 后，在启动命令前加 ONESERVING_BACKEND=redknot。
 ```
 
