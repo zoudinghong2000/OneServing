@@ -17,11 +17,13 @@ from fastapi import FastAPI, HTTPException, Request
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel, ConfigDict, Field, StrictInt
 
+from serving.extensions import backend_factory
 from .engine import MODEL_NAME, InferenceEngine
 
 
 class CompletionInput(BaseModel):
     model_config = ConfigDict(extra="forbid")
+    extensions: dict | None = None
     model: str = MODEL_NAME
     prompt: str | list[int]
     max_tokens: int = Field(default=32, ge=1, le=1536)
@@ -40,6 +42,7 @@ class ChatMessage(BaseModel):
 
 class ChatInput(BaseModel):
     model_config = ConfigDict(extra="forbid")
+    extensions: dict | None = None
     model: str = MODEL_NAME
     messages: list[ChatMessage] = Field(min_length=1)
     max_tokens: int = Field(default=32, ge=1, le=1536)
@@ -84,7 +87,7 @@ async def lifespan(app: FastAPI):
         raise RuntimeError("PREFIX_CACHE must be 0 or 1")
     prefix_cache = prefix_setting == "1"
     if dp == 1 and tp == 1 and len(devices) == 1:
-        engine = InferenceEngine(root, devices[0], max_active=max_active,
+        engine = backend_factory(InferenceEngine)(root, devices[0], max_active=max_active,
                                  prefix_cache=prefix_cache)
     else:
         raise RuntimeError("DP/TP topology does not match assigned device count")
@@ -237,9 +240,9 @@ async def completions(body: CompletionInput, request: Request):
     engine: InferenceEngine = app.state.engine
     try:
         stops = stop_strings(body.stop)
-        job = (engine.submit_text(body.prompt, body.max_tokens, stops, stop_token_ids=body.stop_token_ids, ignore_eos=body.ignore_eos)
+        job = (engine.submit_text(body.prompt, body.max_tokens, stops, stop_token_ids=body.stop_token_ids, ignore_eos=body.ignore_eos, **({'extensions': body.extensions} if body.extensions else {}))
                if isinstance(body.prompt, str) else
-               engine.submit_tokens(body.prompt, body.max_tokens, stops, stop_token_ids=body.stop_token_ids, ignore_eos=body.ignore_eos))
+               engine.submit_tokens(body.prompt, body.max_tokens, stops, stop_token_ids=body.stop_token_ids, ignore_eos=body.ignore_eos, **({'extensions': body.extensions} if body.extensions else {})))
     except ValueError as exc:
         raise HTTPException(400, str(exc)) from exc
     except RuntimeError as exc:
@@ -254,7 +257,7 @@ async def chat_completions(body: ChatInput, request: Request):
     engine: InferenceEngine = app.state.engine
     try:
         job = engine.submit_chat([message.model_dump() for message in body.messages],
-                                 body.max_tokens, stop_strings(body.stop), stop_token_ids=body.stop_token_ids, ignore_eos=body.ignore_eos)
+                                 body.max_tokens, stop_strings(body.stop), stop_token_ids=body.stop_token_ids, ignore_eos=body.ignore_eos, **({'extensions': body.extensions} if body.extensions else {}))
     except ValueError as exc:
         raise HTTPException(400, str(exc)) from exc
     except RuntimeError as exc:

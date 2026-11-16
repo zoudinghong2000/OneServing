@@ -30,6 +30,9 @@ def percentile(values: list[float], fraction: float) -> float | None:
 
 
 class InferenceEngine:
+    runner_class = None
+    scheduler_class = None
+
     def __init__(self, model_root: Path, device_id: int,
                  max_active: int = 2, prefix_cache: bool = False):
         if not 1 <= max_active <= BATCH:
@@ -47,12 +50,12 @@ class InferenceEngine:
         self.completed: deque[dict] = deque(maxlen=10000)
         self.errors = 0
         self.cancelled = 0
-        self.runner = ModelRunner(model_root, device_id,
+        self.runner = (self.runner_class or ModelRunner)(model_root, device_id,
                                   on_cache_event=self._on_cache,
                                   enable_mixed=os.environ.get("PYPTO_MIXED_PREFILL", "0") == "1",
                                   async_prepare=os.environ.get("PYPTO_ASYNC_PREPARE", "0") == "1")
         self.runner.allow_prefix_hits = prefix_cache
-        self.scheduler = Scheduler(self.runner, eos_ids, max_active=max_active,
+        self.scheduler = (self.scheduler_class or Scheduler)(self.runner, eos_ids, max_active=max_active,
                                    on_trace=self._on_trace,
                                    decode_tokens=self.decode)
 
@@ -83,26 +86,33 @@ class InferenceEngine:
                                      clean_up_tokenization_spaces=False)
 
     def submit_tokens(self, prompt_ids: list[int], max_tokens: int,
-                      stop_strings: tuple[str, ...] = (), *, stop_token_ids=None, ignore_eos: bool = False) -> RequestState:
+                      stop_strings: tuple[str, ...] = (), *, stop_token_ids=None, ignore_eos: bool = False, extensions: dict | None = None) -> RequestState:
         if any(not isinstance(token, int) or not 0 <= token < 248320 for token in prompt_ids):
             raise ValueError("Prompt contains an invalid token ID")
         if any(not value for value in stop_strings):
             raise ValueError("Stop strings must be nonempty")
         effective_stops = request_stop_token_ids(self.eos_ids, stop_token_ids, ignore_eos)
+        if extensions:
+            context = self.request_context(prompt_ids, max_tokens, extensions)
+            return self.scheduler.submit(prompt_ids, max_tokens, stop_strings, stop_token_ids=effective_stops,
+                                         execution_context=context)
         return self.scheduler.submit(prompt_ids, max_tokens, stop_strings, stop_token_ids=effective_stops)
 
+    def request_context(self, prompt_ids, max_tokens, extensions):
+        raise ValueError("This engine does not handle request extensions")
+
     def submit_text(self, prompt: str, max_tokens: int,
-                    stop_strings: tuple[str, ...] = (), *, stop_token_ids=None, ignore_eos: bool = False) -> RequestState:
+                    stop_strings: tuple[str, ...] = (), *, stop_token_ids=None, ignore_eos: bool = False, extensions: dict | None = None) -> RequestState:
         return self.submit_tokens(self.tokenizer.encode(prompt, add_special_tokens=False),
-                                  max_tokens, stop_strings, stop_token_ids=stop_token_ids, ignore_eos=ignore_eos)
+                                  max_tokens, stop_strings, stop_token_ids=stop_token_ids, ignore_eos=ignore_eos, **({'extensions': extensions} if extensions else {}))
 
     def submit_chat(self, messages: list[dict[str, str]], max_tokens: int,
-                    stop_strings: tuple[str, ...] = (), *, stop_token_ids=None, ignore_eos: bool = False) -> RequestState:
+                    stop_strings: tuple[str, ...] = (), *, stop_token_ids=None, ignore_eos: bool = False, extensions: dict | None = None) -> RequestState:
         encoded = self.tokenizer.apply_chat_template(
             messages, tokenize=True, add_generation_prompt=True,
             enable_thinking=False)
         prompt_ids = encoded["input_ids"] if hasattr(encoded, "keys") else encoded
-        return self.submit_tokens(prompt_ids, max_tokens, stop_strings, stop_token_ids=stop_token_ids, ignore_eos=ignore_eos)
+        return self.submit_tokens(prompt_ids, max_tokens, stop_strings, stop_token_ids=stop_token_ids, ignore_eos=ignore_eos, **({'extensions': extensions} if extensions else {}))
 
     def snapshot(self) -> dict:
         with self.lock:

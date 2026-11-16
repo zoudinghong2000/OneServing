@@ -31,6 +31,7 @@ class RequestState:
     finish_reason: str | None = None
     stop_match: str | None = None
     runtime_state: Any = None
+    execution_context: Any = None
 
     def metrics(self) -> dict[str, float | int | None]:
         ttft = ((self.token_times_ns[0] - self.submitted_ns) / 1e6
@@ -100,13 +101,14 @@ class Scheduler:
             raise RuntimeError("Batch runner failed to start") from self.error
 
     def submit(self, prompt_ids: list[int], max_tokens: int,
-               stop_strings: tuple[str, ...] = (), *, stop_token_ids: frozenset[int] | None = None) -> RequestState:
+               stop_strings: tuple[str, ...] = (), *, stop_token_ids: frozenset[int] | None = None,
+               execution_context: Any = None) -> RequestState:
         if not self.ready.is_set() or self.stopping.is_set() or self.error is not None:
             raise RuntimeError("Batch scheduler is unavailable")
         if not prompt_ids or max_tokens < 1 or len(prompt_ids) + max_tokens > CONTEXT:
             raise ValueError("Prompt and completion exceed the supported context")
         request = RequestState(prompt_ids, max_tokens, self.stop_token_ids if stop_token_ids is None else stop_token_ids,
-                               stop_strings=stop_strings)
+                               stop_strings=stop_strings, execution_context=execution_context)
         with self.lock:
             if len(self.pending) + self.incoming.qsize() >= self.max_queued:
                 raise RuntimeError("Request queue is full")
