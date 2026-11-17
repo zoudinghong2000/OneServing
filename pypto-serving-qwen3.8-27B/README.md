@@ -34,3 +34,6 @@ The host source port passes scheduler/owner mock tests, including cancellation, 
 The service exposes `/health`, `/metrics`, `/v1/completions`, and `/v1/chat/completions`; requests are greedy (`temperature=0`). The optimized API supports normal and SSE text/chat, generated token IDs, stop strings/token IDs, `ignore_eos`, and checkpoint EOS configuration. Preserve the input-plus-output context limit. `run.sh --help` lists backend and topology options.
 
 A short probe is available through `python benchmarks/verify_candidate.py --mode correctness` or `--mode benchmark`, with the external checkpoint selected by `PYPTO_HARNESS_MODEL_ROOT`. The probe propagates `--max-active` to `run.sh`; it is a small smoke/throughput probe rather than the full numerical or service acceptance suite.
+# Experimental operator interfaces
+
+This branch also includes the [P40b-I2 RedKnot attention/FFN interface](docs/redknot-operator-interfaces.md), with serving-owned model compilation and KV allocation. It requires the matching alternative provider and retains the documented 32K and numerical-validation limits.

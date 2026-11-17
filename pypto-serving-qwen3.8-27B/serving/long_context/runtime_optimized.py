@@ -62,6 +62,26 @@ class ModelRunner(base.ModelRunner):
         self.executed_graphs = Counter()
         self.preserved_local_compactions = 0
         self.async281 = None
+        self.model_extensions = None
+        self.interface_compiler = None
+        self.page_allocator = None
+
+    def configure_extensions(self, extensions):
+        if self.worker is not None:
+            raise RuntimeError('Model extensions must be selected before startup')
+        from .head_page_allocator import KVLayout, HeadPageAllocator
+        self.model_extensions = extensions
+        self.kv_layout = KVLayout.from_environment()
+        self.page_allocator = HeadPageAllocator(self.kv_layout, extensions.attention)
+        self.provenance['operator_interface'] = {
+            'family': extensions.family,
+            'network_owner': 'serving',
+            'kv_owner': 'serving',
+            'context': self.kv_layout.context,
+            'physical_pages': self.kv_layout.physical_pages,
+            'kv_bytes': self.kv_layout.physical_pages * self.kv_layout.bytes_per_page,
+            'sparse_ffn': extensions.ffn.enabled,
+        }
 
     def _alloc(self, shape, dtype, init=None):
         value = self.worker.alloc_tensor(tuple(shape), dtype, init=init)
@@ -77,6 +97,19 @@ class ModelRunner(base.ModelRunner):
         return result
 
     def load_programs(self):
+        if self.model_extensions is not None:
+            from .interface_compiler import InterfaceCompiler
+            self.interface_compiler = InterfaceCompiler(self.model_extensions, self.kv_layout, self.config)
+            self.graph_specs, self.programs = {}, {}
+            try:
+                for name in self.model_extensions.roles:
+                    spec, program = self.interface_compiler.load(name)
+                    self.graph_specs[name], self.programs[name] = spec, program
+            except BaseException:
+                self.interface_compiler.close()
+                self.interface_compiler = None
+                raise
+            return list(self.programs)
         specs_path = Path(__file__).with_name('kernels') / 'graph_specs.json'
         self.graph_specs = json.loads(specs_path.read_text())
         names = ['prefill_small16', 'prefill_wide64', 'prefill_chunk512',
@@ -126,6 +159,11 @@ class ModelRunner(base.ModelRunner):
                 self.banks.append(self._alloc(host.shape, host.dtype, host))
             for p in self.graph_specs['prefill_small16']['params'][29:33]:
                 shape, dtype = tuple(p['shape']), DTYPES[p['dtype']]
+                if self.page_allocator is not None and p['name'].split('__')[0] in ('key_pool', 'value_pool'):
+                    # The serving allocator owns capacity. A graph must accept its pool.
+                    shape = self.kv_layout.pool_shape
+                    if tuple(p['shape']) != shape:
+                        raise ValueError('Model KV annotation differs from the serving allocation')
                 self.resident.append(self._alloc(shape, dtype, torch.zeros(shape, dtype=dtype)))
             self.conv_words = DeviceTensor(self.resident[0].data_ptr, (1, 983040), torch.int32,
                                            buffer=self.resident[0].buffer)
@@ -165,6 +203,9 @@ class ModelRunner(base.ModelRunner):
     def close(self):
         worker, self.worker = self.worker, None
         if worker is None:
+            if self.interface_compiler is not None:
+                self.interface_compiler.close()
+                self.interface_compiler = None
             return
         try:
             if self.async281 is not None:
@@ -177,10 +218,16 @@ class ModelRunner(base.ModelRunner):
             self._allocated.clear()
             self.banks.clear()
             self.resident.clear()
+            if self.interface_compiler is not None:
+                self.interface_compiler.close()
+                self.interface_compiler = None
 
     def admit(self, request):
         if self.async281 is not None:
             self.async281.cancel('admit')
+        if self.page_allocator is not None:
+            end = self.model_extensions.attention.full_history_end(request, self.scheduler)
+            self.page_allocator.reset(request.request_id, end)
         return super().admit(request)
 
     def release(self, request):
@@ -283,6 +330,8 @@ class ModelRunner(base.ModelRunner):
             cos[index, :count] = self.rope['cos'][position:position + count]
             sin[index, :count] = self.rope['sin'][position:position + count]
             counts[index], offsets[index] = count, position
+            if self.page_allocator is not None:
+                self.page_allocator.prepare(slot, tables[index], self._active_graph_role)
 
     def _arguments(self, fields, outputs, count, *, decode=False):
         values = (fields['ids'], *self.banks, *(fields[n] for n in FIELDS[1:6]),
@@ -306,6 +355,7 @@ class ModelRunner(base.ModelRunner):
                 return run_mixed(self, slots)
         self._compact(slots)
         name, fields, graph, outputs = self._resources(slots)
+        self._active_graph_role = name
         decode_only = name == 'decode_greedy'
         if self.async281 is not None:
             self.async281.begin(slots)

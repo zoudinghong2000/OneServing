@@ -1,0 +1,5056 @@
+{
+  "prefill_small16": {
+    "spec": {
+      "module": "serving.long_context.qwen27b.prefill_small16",
+      "entrypoint": "prefill_fwd",
+      "original_CID": 0,
+      "parameter_count": 37,
+      "actual_functions": 57,
+      "params": [
+        {
+          "name": "input_ids__ssa_v0",
+          "direction": "In",
+          "shape": [
+            8,
+            16
+          ],
+          "dtype": "int32",
+          "layout": "ND"
+        },
+        {
+          "name": "embedding__ssa_v0",
+          "direction": "In",
+          "shape": [
+            248320,
+            5120
+          ],
+          "dtype": "bfloat16",
+          "layout": "ND"
+        },
+        {
+          "name": "final_gamma__ssa_v0",
+          "direction": "In",
+          "shape": [
+            1,
+            5120
+          ],
+          "dtype": "fp32",
+          "layout": "ND"
+        },
+        {
+          "name": "lm_head__ssa_v0",
+          "direction": "In",
+          "shape": [
+            248320,
+            5120
+          ],
+          "dtype": "bfloat16",
+          "layout": "ND"
+        },
+        {
+          "name": "input_gamma__ssa_v0",
+          "direction": "In",
+          "shape": [
+            64,
+            5120
+          ],
+          "dtype": "fp32",
+          "layout": "ND"
+        },
+        {
+          "name": "post_gamma__ssa_v0",
+          "direction": "In",
+          "shape": [
+            64,
+            5120
+          ],
+          "dtype": "fp32",
+          "layout": "ND"
+        },
+        {
+          "name": "mlp_gate_weight__ssa_v0",
+          "direction": "In",
+          "shape": [
+            64,
+            1088,
+            320,
+            16,
+            16
+          ],
+          "dtype": "bfloat16",
+          "layout": "NZ"
+        },
+        {
+          "name": "mlp_up_weight__ssa_v0",
+          "direction": "In",
+          "shape": [
+            64,
+            1088,
+            320,
+            16,
+            16
+          ],
+          "dtype": "bfloat16",
+          "layout": "NZ"
+        },
+        {
+          "name": "mlp_down_weight__ssa_v0",
+          "direction": "In",
+          "shape": [
+            64,
+            320,
+            1088,
+            16,
+            16
+          ],
+          "dtype": "bfloat16",
+          "layout": "NZ"
+        },
+        {
+          "name": "delta_qkv_weight__ssa_v0",
+          "direction": "In",
+          "shape": [
+            48,
+            640,
+            320,
+            16,
+            16
+          ],
+          "dtype": "bfloat16",
+          "layout": "NZ"
+        },
+        {
+          "name": "delta_z_weight__ssa_v0",
+          "direction": "In",
+          "shape": [
+            48,
+            384,
+            320,
+            16,
+            16
+          ],
+          "dtype": "bfloat16",
+          "layout": "NZ"
+        },
+        {
+          "name": "delta_a_weight__ssa_v0",
+          "direction": "In",
+          "shape": [
+            48,
+            8,
+            320,
+            16,
+            16
+          ],
+          "dtype": "bfloat16",
+          "layout": "NZ"
+        },
+        {
+          "name": "delta_b_weight__ssa_v0",
+          "direction": "In",
+          "shape": [
+            48,
+            8,
+            320,
+            16,
+            16
+          ],
+          "dtype": "bfloat16",
+          "layout": "NZ"
+        },
+        {
+          "name": "delta_conv_weight__ssa_v0",
+          "direction": "In",
+          "shape": [
+            192,
+            10240
+          ],
+          "dtype": "bfloat16",
+          "layout": "ND"
+        },
+        {
+          "name": "delta_a_log__ssa_v0",
+          "direction": "In",
+          "shape": [
+            48,
+            64
+          ],
+          "dtype": "bfloat16",
+          "layout": "ND"
+        },
+        {
+          "name": "delta_dt_bias__ssa_v0",
+          "direction": "In",
+          "shape": [
+            48,
+            64
+          ],
+          "dtype": "bfloat16",
+          "layout": "ND"
+        },
+        {
+          "name": "delta_norm_weight__ssa_v0",
+          "direction": "In",
+          "shape": [
+            48,
+            128
+          ],
+          "dtype": "bfloat16",
+          "layout": "ND"
+        },
+        {
+          "name": "delta_out_weight__ssa_v0",
+          "direction": "In",
+          "shape": [
+            48,
+            320,
+            384,
+            16,
+            16
+          ],
+          "dtype": "bfloat16",
+          "layout": "NZ"
+        },
+        {
+          "name": "full_q_weight__ssa_v0",
+          "direction": "In",
+          "shape": [
+            16,
+            768,
+            320,
+            16,
+            16
+          ],
+          "dtype": "bfloat16",
+          "layout": "NZ"
+        },
+        {
+          "name": "full_k_weight__ssa_v0",
+          "direction": "In",
+          "shape": [
+            16,
+            64,
+            320,
+            16,
+            16
+          ],
+          "dtype": "bfloat16",
+          "layout": "NZ"
+        },
+        {
+          "name": "full_v_weight__ssa_v0",
+          "direction": "In",
+          "shape": [
+            16,
+            64,
+            320,
+            16,
+            16
+          ],
+          "dtype": "bfloat16",
+          "layout": "NZ"
+        },
+        {
+          "name": "full_q_gamma__ssa_v0",
+          "direction": "In",
+          "shape": [
+            16,
+            256
+          ],
+          "dtype": "fp32",
+          "layout": "ND"
+        },
+        {
+          "name": "full_k_gamma__ssa_v0",
+          "direction": "In",
+          "shape": [
+            16,
+            256
+          ],
+          "dtype": "fp32",
+          "layout": "ND"
+        },
+        {
+          "name": "full_out_weight__ssa_v0",
+          "direction": "In",
+          "shape": [
+            16,
+            320,
+            384,
+            16,
+            16
+          ],
+          "dtype": "bfloat16",
+          "layout": "NZ"
+        },
+        {
+          "name": "cos__ssa_v0",
+          "direction": "In",
+          "shape": [
+            8,
+            16,
+            64
+          ],
+          "dtype": "bfloat16",
+          "layout": "ND"
+        },
+        {
+          "name": "sin__ssa_v0",
+          "direction": "In",
+          "shape": [
+            8,
+            16,
+            64
+          ],
+          "dtype": "bfloat16",
+          "layout": "ND"
+        },
+        {
+          "name": "mask__ssa_v0",
+          "direction": "In",
+          "shape": [
+            8,
+            16,
+            32768
+          ],
+          "dtype": "fp32",
+          "layout": "ND"
+        },
+        {
+          "name": "token_counts__ssa_v0",
+          "direction": "In",
+          "shape": [
+            8
+          ],
+          "dtype": "int32",
+          "layout": "ND"
+        },
+        {
+          "name": "cache_offsets__ssa_v0",
+          "direction": "In",
+          "shape": [
+            8
+          ],
+          "dtype": "int32",
+          "layout": "ND"
+        },
+        {
+          "name": "conv_states__ssa_v0",
+          "direction": "InOut",
+          "shape": [
+            1,
+            48,
+            4,
+            10240
+          ],
+          "dtype": "bfloat16",
+          "layout": "ND"
+        },
+        {
+          "name": "recurrent_states__ssa_v0",
+          "direction": "InOut",
+          "shape": [
+            1,
+            48,
+            48,
+            128,
+            128
+          ],
+          "dtype": "fp32",
+          "layout": "ND"
+        },
+        {
+          "name": "key_pool__ssa_v0",
+          "direction": "InOut",
+          "shape": [
+            16,
+            1,
+            1025,
+            128,
+            256
+          ],
+          "dtype": "bfloat16",
+          "layout": "ND"
+        },
+        {
+          "name": "value_pool__ssa_v0",
+          "direction": "InOut",
+          "shape": [
+            16,
+            1,
+            1025,
+            128,
+            256
+          ],
+          "dtype": "bfloat16",
+          "layout": "ND"
+        },
+        {
+          "name": "block_tables__ssa_v0",
+          "direction": "In",
+          "shape": [
+            8,
+            2048
+          ],
+          "dtype": "int32",
+          "layout": "ND"
+        },
+        {
+          "name": "traces__ssa_v0",
+          "direction": "InOut",
+          "shape": [
+            8,
+            66,
+            16,
+            5120
+          ],
+          "dtype": "bfloat16",
+          "layout": "ND"
+        },
+        {
+          "name": "logits__ssa_v0",
+          "direction": "Out",
+          "shape": [
+            8,
+            16,
+            248320
+          ],
+          "dtype": "bfloat16",
+          "layout": "ND"
+        },
+        {
+          "name": "active_count__ssa_v0",
+          "direction": "In",
+          "shape": null,
+          "dtype": "int32",
+          "layout": null
+        }
+      ],
+      "distributed_config": {
+        "device_ids": [
+          0
+        ],
+        "num_sub_workers": 0,
+        "runtime": "tensormap_and_ringbuffer",
+        "aicpu_thread_num": 0
+      },
+      "metadata_sha256": "0cd21eacde918264018ce35327a258c279890fa94368f562b6315b16224e4dfe"
+    },
+    "operators": {},
+    "ffn_phases": []
+  },
+  "prefill_wide64": {
+    "spec": {
+      "module": "serving.long_context.qwen27b.prefill_wide64",
+      "entrypoint": "prefill_fwd",
+      "original_CID": 8,
+      "parameter_count": 37,
+      "actual_functions": 520,
+      "params": [
+        {
+          "name": "input_ids__ssa_v0",
+          "direction": "In",
+          "shape": [
+            8,
+            64
+          ],
+          "dtype": "int32",
+          "layout": "ND"
+        },
+        {
+          "name": "embedding__ssa_v0",
+          "direction": "In",
+          "shape": [
+            248320,
+            5120
+          ],
+          "dtype": "bfloat16",
+          "layout": "ND"
+        },
+        {
+          "name": "final_gamma__ssa_v0",
+          "direction": "In",
+          "shape": [
+            1,
+            5120
+          ],
+          "dtype": "fp32",
+          "layout": "ND"
+        },
+        {
+          "name": "lm_head__ssa_v0",
+          "direction": "In",
+          "shape": [
+            248320,
+            5120
+          ],
+          "dtype": "bfloat16",
+          "layout": "ND"
+        },
+        {
+          "name": "input_gamma__ssa_v0",
+          "direction": "In",
+          "shape": [
+            64,
+            5120
+          ],
+          "dtype": "fp32",
+          "layout": "ND"
+        },
+        {
+          "name": "post_gamma__ssa_v0",
+          "direction": "In",
+          "shape": [
+            64,
+            5120
+          ],
+          "dtype": "fp32",
+          "layout": "ND"
+        },
+        {
+          "name": "mlp_gate_weight__ssa_v0",
+          "direction": "In",
+          "shape": [
+            64,
+            1088,
+            320,
+            16,
+            16
+          ],
+          "dtype": "bfloat16",
+          "layout": "NZ"
+        },
+        {
+          "name": "mlp_up_weight__ssa_v0",
+          "direction": "In",
+          "shape": [
+            64,
+            1088,
+            320,
+            16,
+            16
+          ],
+          "dtype": "bfloat16",
+          "layout": "NZ"
+        },
+        {
+          "name": "mlp_down_weight__ssa_v0",
+          "direction": "In",
+          "shape": [
+            64,
+            320,
+            1088,
+            16,
+            16
+          ],
+          "dtype": "bfloat16",
+          "layout": "NZ"
+        },
+        {
+          "name": "delta_qkv_weight__ssa_v0",
+          "direction": "In",
+          "shape": [
+            48,
+            640,
+            320,
+            16,
+            16
+          ],
+          "dtype": "bfloat16",
+          "layout": "NZ"
+        },
+        {
+          "name": "delta_z_weight__ssa_v0",
+          "direction": "In",
+          "shape": [
+            48,
+            384,
+            320,
+            16,
+            16
+          ],
+          "dtype": "bfloat16",
+          "layout": "NZ"
+        },
+        {
+          "name": "delta_a_weight__ssa_v0",
+          "direction": "In",
+          "shape": [
+            48,
+            8,
+            320,
+            16,
+            16
+          ],
+          "dtype": "bfloat16",
+          "layout": "NZ"
+        },
+        {
+          "name": "delta_b_weight__ssa_v0",
+          "direction": "In",
+          "shape": [
+            48,
+            8,
+            320,
+            16,
+            16
+          ],
+          "dtype": "bfloat16",
+          "layout": "NZ"
+        },
+        {
+          "name": "delta_conv_weight__ssa_v0",
+          "direction": "In",
+          "shape": [
+            192,
+            10240
+          ],
+          "dtype": "bfloat16",
+          "layout": "ND"
+        },
+        {
+          "name": "delta_a_log__ssa_v0",
+          "direction": "In",
+          "shape": [
+            48,
+            64
+          ],
+          "dtype": "bfloat16",
+          "layout": "ND"
+        },
+        {
+          "name": "delta_dt_bias__ssa_v0",
+          "direction": "In",
+          "shape": [
+            48,
+            64
+          ],
+          "dtype": "bfloat16",
+          "layout": "ND"
+        },
+        {
+          "name": "delta_norm_weight__ssa_v0",
+          "direction": "In",
+          "shape": [
+            48,
+            128
+          ],
+          "dtype": "bfloat16",
+          "layout": "ND"
+        },
+        {
+          "name": "delta_out_weight__ssa_v0",
+          "direction": "In",
+          "shape": [
+            48,
+            320,
+            384,
+            16,
+            16
+          ],
+          "dtype": "bfloat16",
+          "layout": "NZ"
+        },
+        {
+          "name": "full_q_weight__ssa_v0",
+          "direction": "In",
+          "shape": [
+            16,
+            768,
+            320,
+            16,
+            16
+          ],
+          "dtype": "bfloat16",
+          "layout": "NZ"
+        },
+        {
+          "name": "full_k_weight__ssa_v0",
+          "direction": "In",
+          "shape": [
+            16,
+            64,
+            320,
+            16,
+            16
+          ],
+          "dtype": "bfloat16",
+          "layout": "NZ"
+        },
+        {
+          "name": "full_v_weight__ssa_v0",
+          "direction": "In",
+          "shape": [
+            16,
+            64,
+            320,
+            16,
+            16
+          ],
+          "dtype": "bfloat16",
+          "layout": "NZ"
+        },
+        {
+          "name": "full_q_gamma__ssa_v0",
+          "direction": "In",
+          "shape": [
+            16,
+            256
+          ],
+          "dtype": "fp32",
+          "layout": "ND"
+        },
+        {
+          "name": "full_k_gamma__ssa_v0",
+          "direction": "In",
+          "shape": [
+            16,
+            256
+          ],
+          "dtype": "fp32",
+          "layout": "ND"
+        },
+        {
+          "name": "full_out_weight__ssa_v0",
+          "direction": "In",
+          "shape": [
+            16,
+            320,
+            384,
+            16,
+            16
+          ],
+          "dtype": "bfloat16",
+          "layout": "NZ"
+        },
+        {
+          "name": "cos__ssa_v0",
+          "direction": "In",
+          "shape": [
+            8,
+            64,
+            64
+          ],
+          "dtype": "bfloat16",
+          "layout": "ND"
+        },
+        {
+          "name": "sin__ssa_v0",
+          "direction": "In",
+          "shape": [
+            8,
+            64,
+            64
+          ],
+          "dtype": "bfloat16",
+          "layout": "ND"
+        },
+        {
+          "name": "mask__ssa_v0",
+          "direction": "In",
+          "shape": [
+            8,
+            64,
+            32768
+          ],
+          "dtype": "fp32",
+          "layout": "ND"
+        },
+        {
+          "name": "token_counts__ssa_v0",
+          "direction": "In",
+          "shape": [
+            8
+          ],
+          "dtype": "int32",
+          "layout": "ND"
+        },
+        {
+          "name": "cache_offsets__ssa_v0",
+          "direction": "In",
+          "shape": [
+            8
+          ],
+          "dtype": "int32",
+          "layout": "ND"
+        },
+        {
+          "name": "conv_states__ssa_v0",
+          "direction": "InOut",
+          "shape": [
+            1,
+            48,
+            4,
+            10240
+          ],
+          "dtype": "bfloat16",
+          "layout": "ND"
+        },
+        {
+          "name": "recurrent_states__ssa_v0",
+          "direction": "InOut",
+          "shape": [
+            1,
+            48,
+            48,
+            128,
+            128
+          ],
+          "dtype": "fp32",
+          "layout": "ND"
+        },
+        {
+          "name": "key_pool__ssa_v0",
+          "direction": "InOut",
+          "shape": [
+            16,
+            1,
+            1025,
+            128,
+            256
+          ],
+          "dtype": "bfloat16",
+          "layout": "ND"
+        },
+        {
+          "name": "value_pool__ssa_v0",
+          "direction": "InOut",
+          "shape": [
+            16,
+            1,
+            1025,
+            128,
+            256
+          ],
+          "dtype": "bfloat16",
+          "layout": "ND"
+        },
+        {
+          "name": "block_tables__ssa_v0",
+          "direction": "In",
+          "shape": [
+            8,
+            2048
+          ],
+          "dtype": "int32",
+          "layout": "ND"
+        },
+        {
+          "name": "traces__ssa_v0",
+          "direction": "InOut",
+          "shape": [
+            8,
+            66,
+            64,
+            5120
+          ],
+          "dtype": "bfloat16",
+          "layout": "ND"
+        },
+        {
+          "name": "logits__ssa_v0",
+          "direction": "InOut",
+          "shape": [
+            8,
+            64,
+            248320
+          ],
+          "dtype": "bfloat16",
+          "layout": "ND"
+        },
+        {
+          "name": "active_count__ssa_v0",
+          "direction": "In",
+          "shape": null,
+          "dtype": "int32",
+          "layout": null
+        }
+      ],
+      "distributed_config": {
+        "device_ids": [
+          0
+        ],
+        "num_sub_workers": 0,
+        "runtime": "tensormap_and_ringbuffer",
+        "aicpu_thread_num": 0
+      },
+      "metadata_sha256": "77865563413f0dfee0dd88dbd4b5b6f3f45b5ea2f0e3cbd082430e283e538155"
+    },
+    "operators": {},
+    "ffn_phases": []
+  },
+  "prefill_chunk512": {
+    "spec": {
+      "module": "serving.long_context.qwen27b.prefill_chunk512",
+      "entrypoint": "prefill_fwd",
+      "original_CID": 7,
+      "parameter_count": 37,
+      "actual_functions": 61,
+      "params": [
+        {
+          "name": "input_ids__ssa_v0",
+          "direction": "In",
+          "shape": [
+            1,
+            512
+          ],
+          "dtype": "int32",
+          "layout": "ND"
+        },
+        {
+          "name": "embedding__ssa_v0",
+          "direction": "In",
+          "shape": [
+            248320,
+            5120
+          ],
+          "dtype": "bfloat16",
+          "layout": "ND"
+        },
+        {
+          "name": "final_gamma__ssa_v0",
+          "direction": "In",
+          "shape": [
+            1,
+            5120
+          ],
+          "dtype": "fp32",
+          "layout": "ND"
+        },
+        {
+          "name": "lm_head__ssa_v0",
+          "direction": "In",
+          "shape": [
+            248320,
+            5120
+          ],
+          "dtype": "bfloat16",
+          "layout": "ND"
+        },
+        {
+          "name": "input_gamma__ssa_v0",
+          "direction": "In",
+          "shape": [
+            64,
+            5120
+          ],
+          "dtype": "fp32",
+          "layout": "ND"
+        },
+        {
+          "name": "post_gamma__ssa_v0",
+          "direction": "In",
+          "shape": [
+            64,
+            5120
+          ],
+          "dtype": "fp32",
+          "layout": "ND"
+        },
+        {
+          "name": "mlp_gate_weight__ssa_v0",
+          "direction": "In",
+          "shape": [
+            64,
+            1088,
+            320,
+            16,
+            16
+          ],
+          "dtype": "bfloat16",
+          "layout": "NZ"
+        },
+        {
+          "name": "mlp_up_weight__ssa_v0",
+          "direction": "In",
+          "shape": [
+            64,
+            1088,
+            320,
+            16,
+            16
+          ],
+          "dtype": "bfloat16",
+          "layout": "NZ"
+        },
+        {
+          "name": "mlp_down_weight__ssa_v0",
+          "direction": "In",
+          "shape": [
+            64,
+            320,
+            1088,
+            16,
+            16
+          ],
+          "dtype": "bfloat16",
+          "layout": "NZ"
+        },
+        {
+          "name": "delta_qkv_weight__ssa_v0",
+          "direction": "In",
+          "shape": [
+            48,
+            640,
+            320,
+            16,
+            16
+          ],
+          "dtype": "bfloat16",
+          "layout": "NZ"
+        },
+        {
+          "name": "delta_z_weight__ssa_v0",
+          "direction": "In",
+          "shape": [
+            48,
+            384,
+            320,
+            16,
+            16
+          ],
+          "dtype": "bfloat16",
+          "layout": "NZ"
+        },
+        {
+          "name": "delta_a_weight__ssa_v0",
+          "direction": "In",
+          "shape": [
+            48,
+            8,
+            320,
+            16,
+            16
+          ],
+          "dtype": "bfloat16",
+          "layout": "NZ"
+        },
+        {
+          "name": "delta_b_weight__ssa_v0",
+          "direction": "In",
+          "shape": [
+            48,
+            8,
+            320,
+            16,
+            16
+          ],
+          "dtype": "bfloat16",
+          "layout": "NZ"
+        },
+        {
+          "name": "delta_conv_weight__ssa_v0",
+          "direction": "In",
+          "shape": [
+            192,
+            10240
+          ],
+          "dtype": "bfloat16",
+          "layout": "ND"
+        },
+        {
+          "name": "delta_a_log__ssa_v0",
+          "direction": "In",
+          "shape": [
+            48,
+            64
+          ],
+          "dtype": "bfloat16",
+          "layout": "ND"
+        },
+        {
+          "name": "delta_dt_bias__ssa_v0",
+          "direction": "In",
+          "shape": [
+            48,
+            64
+          ],
+          "dtype": "bfloat16",
+          "layout": "ND"
+        },
+        {
+          "name": "delta_norm_weight__ssa_v0",
+          "direction": "In",
+          "shape": [
+            48,
+            128
+          ],
+          "dtype": "bfloat16",
+          "layout": "ND"
+        },
+        {
+          "name": "delta_out_weight__ssa_v0",
+          "direction": "In",
+          "shape": [
+            48,
+            320,
+            384,
+            16,
+            16
+          ],
+          "dtype": "bfloat16",
+          "layout": "NZ"
+        },
+        {
+          "name": "full_q_weight__ssa_v0",
+          "direction": "In",
+          "shape": [
+            16,
+            768,
+            320,
+            16,
+            16
+          ],
+          "dtype": "bfloat16",
+          "layout": "NZ"
+        },
+        {
+          "name": "full_k_weight__ssa_v0",
+          "direction": "In",
+          "shape": [
+            16,
+            64,
+            320,
+            16,
+            16
+          ],
+          "dtype": "bfloat16",
+          "layout": "NZ"
+        },
+        {
+          "name": "full_v_weight__ssa_v0",
+          "direction": "In",
+          "shape": [
+            16,
+            64,
+            320,
+            16,
+            16
+          ],
+          "dtype": "bfloat16",
+          "layout": "NZ"
+        },
+        {
+          "name": "full_q_gamma__ssa_v0",
+          "direction": "In",
+          "shape": [
+            16,
+            256
+          ],
+          "dtype": "fp32",
+          "layout": "ND"
+        },
+        {
+          "name": "full_k_gamma__ssa_v0",
+          "direction": "In",
+          "shape": [
+            16,
+            256
+          ],
+          "dtype": "fp32",
+          "layout": "ND"
+        },
+        {
+          "name": "full_out_weight__ssa_v0",
+          "direction": "In",
+          "shape": [
+            16,
+            320,
+            384,
+            16,
+            16
+          ],
+          "dtype": "bfloat16",
+          "layout": "NZ"
+        },
+        {
+          "name": "cos__ssa_v0",
+          "direction": "In",
+          "shape": [
+            1,
+            512,
+            64
+          ],
+          "dtype": "bfloat16",
+          "layout": "ND"
+        },
+        {
+          "name": "sin__ssa_v0",
+          "direction": "In",
+          "shape": [
+            1,
+            512,
+            64
+          ],
+          "dtype": "bfloat16",
+          "layout": "ND"
+        },
+        {
+          "name": "mask__ssa_v0",
+          "direction": "In",
+          "shape": [
+            1,
+            512,
+            32768
+          ],
+          "dtype": "fp32",
+          "layout": "ND"
+        },
+        {
+          "name": "token_counts__ssa_v0",
+          "direction": "In",
+          "shape": [
+            1
+          ],
+          "dtype": "int32",
+          "layout": "ND"
+        },
+        {
+          "name": "cache_offsets__ssa_v0",
+          "direction": "In",
+          "shape": [
+            1
+          ],
+          "dtype": "int32",
+          "layout": "ND"
+        },
+        {
+          "name": "conv_states__ssa_v0",
+          "direction": "InOut",
+          "shape": [
+            1,
+            48,
+            4,
+            10240
+          ],
+          "dtype": "bfloat16",
+          "layout": "ND"
+        },
+        {
+          "name": "recurrent_states__ssa_v0",
+          "direction": "InOut",
+          "shape": [
+            1,
+            48,
+            48,
+            128,
+            128
+          ],
+          "dtype": "fp32",
+          "layout": "ND"
+        },
+        {
+          "name": "key_pool__ssa_v0",
+          "direction": "InOut",
+          "shape": [
+            16,
+            1,
+            1025,
+            128,
+            256
+          ],
+          "dtype": "bfloat16",
+          "layout": "ND"
+        },
+        {
+          "name": "value_pool__ssa_v0",
+          "direction": "InOut",
+          "shape": [
+            16,
+            1,
+            1025,
+            128,
+            256
+          ],
+          "dtype": "bfloat16",
+          "layout": "ND"
+        },
+        {
+          "name": "block_tables__ssa_v0",
+          "direction": "In",
+          "shape": [
+            1,
+            2048
+          ],
+          "dtype": "int32",
+          "layout": "ND"
+        },
+        {
+          "name": "traces__ssa_v0",
+          "direction": "InOut",
+          "shape": [
+            1,
+            66,
+            512,
+            5120
+          ],
+          "dtype": "bfloat16",
+          "layout": "ND"
+        },
+        {
+          "name": "logits__ssa_v0",
+          "direction": "InOut",
+          "shape": [
+            1,
+            512,
+            248320
+          ],
+          "dtype": "bfloat16",
+          "layout": "ND"
+        },
+        {
+          "name": "active_count__ssa_v0",
+          "direction": "In",
+          "shape": null,
+          "dtype": "int32",
+          "layout": null
+        }
+      ],
+      "distributed_config": {
+        "device_ids": [
+          0
+        ],
+        "num_sub_workers": 0,
+        "runtime": "tensormap_and_ringbuffer",
+        "aicpu_thread_num": 0
+      },
+      "metadata_sha256": "0d00a189fb7f51d247148dfdeae02c343851c58e32f4185a31c2f4d53a49f8db"
+    },
+    "operators": {},
+    "ffn_phases": []
+  },
+  "decode_greedy": {
+    "spec": {
+      "module": "serving.long_context.qwen27b.decode_greedy",
+      "entrypoint": "decode_greedy_fwd",
+      "original_CID": 9,
+      "parameter_count": 41,
+      "actual_functions": 60,
+      "params": [
+        {
+          "name": "input_ids__ssa_v0",
+          "direction": "In",
+          "shape": [
+            8,
+            8
+          ],
+          "dtype": "int32",
+          "layout": "ND"
+        },
+        {
+          "name": "embedding__ssa_v0",
+          "direction": "In",
+          "shape": [
+            248320,
+            5120
+          ],
+          "dtype": "bfloat16",
+          "layout": "ND"
+        },
+        {
+          "name": "final_gamma__ssa_v0",
+          "direction": "In",
+          "shape": [
+            1,
+            5120
+          ],
+          "dtype": "fp32",
+          "layout": "ND"
+        },
+        {
+          "name": "lm_head__ssa_v0",
+          "direction": "In",
+          "shape": [
+            248320,
+            5120
+          ],
+          "dtype": "bfloat16",
+          "layout": "ND"
+        },
+        {
+          "name": "input_gamma__ssa_v0",
+          "direction": "In",
+          "shape": [
+            64,
+            5120
+          ],
+          "dtype": "fp32",
+          "layout": "ND"
+        },
+        {
+          "name": "post_gamma__ssa_v0",
+          "direction": "In",
+          "shape": [
+            64,
+            5120
+          ],
+          "dtype": "fp32",
+          "layout": "ND"
+        },
+        {
+          "name": "mlp_gate_weight__ssa_v0",
+          "direction": "In",
+          "shape": [
+            64,
+            1088,
+            320,
+            16,
+            16
+          ],
+          "dtype": "bfloat16",
+          "layout": "NZ"
+        },
+        {
+          "name": "mlp_up_weight__ssa_v0",
+          "direction": "In",
+          "shape": [
+            64,
+            1088,
+            320,
+            16,
+            16
+          ],
+          "dtype": "bfloat16",
+          "layout": "NZ"
+        },
+        {
+          "name": "mlp_down_weight__ssa_v0",
+          "direction": "In",
+          "shape": [
+            64,
+            320,
+            1088,
+            16,
+            16
+          ],
+          "dtype": "bfloat16",
+          "layout": "NZ"
+        },
+        {
+          "name": "delta_qkv_weight__ssa_v0",
+          "direction": "In",
+          "shape": [
+            48,
+            640,
+            320,
+            16,
+            16
+          ],
+          "dtype": "bfloat16",
+          "layout": "NZ"
+        },
+        {
+          "name": "delta_z_weight__ssa_v0",
+          "direction": "In",
+          "shape": [
+            48,
+            384,
+            320,
+            16,
+            16
+          ],
+          "dtype": "bfloat16",
+          "layout": "NZ"
+        },
+        {
+          "name": "delta_a_weight__ssa_v0",
+          "direction": "In",
+          "shape": [
+            48,
+            8,
+            320,
+            16,
+            16
+          ],
+          "dtype": "bfloat16",
+          "layout": "NZ"
+        },
+        {
+          "name": "delta_b_weight__ssa_v0",
+          "direction": "In",
+          "shape": [
+            48,
+            8,
+            320,
+            16,
+            16
+          ],
+          "dtype": "bfloat16",
+          "layout": "NZ"
+        },
+        {
+          "name": "delta_conv_weight__ssa_v0",
+          "direction": "In",
+          "shape": [
+            192,
+            10240
+          ],
+          "dtype": "bfloat16",
+          "layout": "ND"
+        },
+        {
+          "name": "delta_a_log__ssa_v0",
+          "direction": "In",
+          "shape": [
+            48,
+            64
+          ],
+          "dtype": "bfloat16",
+          "layout": "ND"
+        },
+        {
+          "name": "delta_dt_bias__ssa_v0",
+          "direction": "In",
+          "shape": [
+            48,
+            64
+          ],
+          "dtype": "bfloat16",
+          "layout": "ND"
+        },
+        {
+          "name": "delta_norm_weight__ssa_v0",
+          "direction": "In",
+          "shape": [
+            48,
+            128
+          ],
+          "dtype": "bfloat16",
+          "layout": "ND"
+        },
+        {
+          "name": "delta_out_weight__ssa_v0",
+          "direction": "In",
+          "shape": [
+            48,
+            320,
+            384,
+            16,
+            16
+          ],
+          "dtype": "bfloat16",
+          "layout": "NZ"
+        },
+        {
+          "name": "full_q_weight__ssa_v0",
+          "direction": "In",
+          "shape": [
+            16,
+            768,
+            320,
+            16,
+            16
+          ],
+          "dtype": "bfloat16",
+          "layout": "NZ"
+        },
+        {
+          "name": "full_k_weight__ssa_v0",
+          "direction": "In",
+          "shape": [
+            16,
+            64,
+            320,
+            16,
+            16
+          ],
+          "dtype": "bfloat16",
+          "layout": "NZ"
+        },
+        {
+          "name": "full_v_weight__ssa_v0",
+          "direction": "In",
+          "shape": [
+            16,
+            64,
+            320,
+            16,
+            16
+          ],
+          "dtype": "bfloat16",
+          "layout": "NZ"
+        },
+        {
+          "name": "full_q_gamma__ssa_v0",
+          "direction": "In",
+          "shape": [
+            16,
+            256
+          ],
+          "dtype": "fp32",
+          "layout": "ND"
+        },
+        {
+          "name": "full_k_gamma__ssa_v0",
+          "direction": "In",
+          "shape": [
+            16,
+            256
+          ],
+          "dtype": "fp32",
+          "layout": "ND"
+        },
+        {
+          "name": "full_out_weight__ssa_v0",
+          "direction": "In",
+          "shape": [
+            16,
+            320,
+            384,
+            16,
+            16
+          ],
+          "dtype": "bfloat16",
+          "layout": "NZ"
+        },
+        {
+          "name": "cos__ssa_v0",
+          "direction": "In",
+          "shape": [
+            8,
+            8,
+            64
+          ],
+          "dtype": "bfloat16",
+          "layout": "ND"
+        },
+        {
+          "name": "sin__ssa_v0",
+          "direction": "In",
+          "shape": [
+            8,
+            8,
+            64
+          ],
+          "dtype": "bfloat16",
+          "layout": "ND"
+        },
+        {
+          "name": "mask__ssa_v0",
+          "direction": "In",
+          "shape": [
+            8,
+            8,
+            32768
+          ],
+          "dtype": "fp32",
+          "layout": "ND"
+        },
+        {
+          "name": "token_counts__ssa_v0",
+          "direction": "In",
+          "shape": [
+            8
+          ],
+          "dtype": "int32",
+          "layout": "ND"
+        },
+        {
+          "name": "cache_offsets__ssa_v0",
+          "direction": "In",
+          "shape": [
+            8
+          ],
+          "dtype": "int32",
+          "layout": "ND"
+        },
+        {
+          "name": "conv_states__ssa_v0",
+          "direction": "InOut",
+          "shape": [
+            1,
+            48,
+            4,
+            10240
+          ],
+          "dtype": "bfloat16",
+          "layout": "ND"
+        },
+        {
+          "name": "recurrent_states__ssa_v0",
+          "direction": "InOut",
+          "shape": [
+            1,
+            48,
+            48,
+            128,
+            128
+          ],
+          "dtype": "fp32",
+          "layout": "ND"
+        },
+        {
+          "name": "key_pool__ssa_v0",
+          "direction": "InOut",
+          "shape": [
+            16,
+            1,
+            1025,
+            128,
+            256
+          ],
+          "dtype": "bfloat16",
+          "layout": "ND"
+        },
+        {
+          "name": "value_pool__ssa_v0",
+          "direction": "InOut",
+          "shape": [
+            16,
+            1,
+            1025,
+            128,
+            256
+          ],
+          "dtype": "bfloat16",
+          "layout": "ND"
+        },
+        {
+          "name": "block_tables__ssa_v0",
+          "direction": "In",
+          "shape": [
+            8,
+            2048
+          ],
+          "dtype": "int32",
+          "layout": "ND"
+        },
+        {
+          "name": "traces__ssa_v0",
+          "direction": "InOut",
+          "shape": [
+            8,
+            66,
+            8,
+            5120
+          ],
+          "dtype": "bfloat16",
+          "layout": "ND"
+        },
+        {
+          "name": "logits__ssa_v0",
+          "direction": "InOut",
+          "shape": [
+            8,
+            8,
+            248320
+          ],
+          "dtype": "bfloat16",
+          "layout": "ND"
+        },
+        {
+          "name": "maxima__ssa_v0",
+          "direction": "InOut",
+          "shape": [
+            8,
+            512
+          ],
+          "dtype": "fp32",
+          "layout": "ND"
+        },
+        {
+          "name": "indices__ssa_v0",
+          "direction": "InOut",
+          "shape": [
+            8,
+            512
+          ],
+          "dtype": "fp32",
+          "layout": "ND"
+        },
+        {
+          "name": "nan_indices__ssa_v0",
+          "direction": "InOut",
+          "shape": [
+            8,
+            512
+          ],
+          "dtype": "fp32",
+          "layout": "ND"
+        },
+        {
+          "name": "selected_tokens__ssa_v0",
+          "direction": "InOut",
+          "shape": [
+            8,
+            8
+          ],
+          "dtype": "int32",
+          "layout": "ND"
+        },
+        {
+          "name": "active_count__ssa_v0",
+          "direction": "In",
+          "shape": null,
+          "dtype": "int32",
+          "layout": null
+        }
+      ],
+      "distributed_config": {
+        "device_ids": [
+          0
+        ],
+        "num_sub_workers": 0,
+        "runtime": "tensormap_and_ringbuffer",
+        "aicpu_thread_num": 0
+      },
+      "metadata_sha256": "ba11680292bbd83c3b454218df03027cd12b0790045e88ba162eb1675a16cc47"
+    },
+    "operators": {},
+    "ffn_phases": []
+  },
+  "zero_state": {
+    "spec": {
+      "module": "serving.long_context.qwen27b.zero_state",
+      "entrypoint": "zero_state_fwd",
+      "original_CID": 2,
+      "parameter_count": 3,
+      "actual_functions": 2,
+      "params": [
+        {
+          "name": "conv__ssa_v0",
+          "direction": "InOut",
+          "shape": [
+            1,
+            48,
+            4,
+            10240
+          ],
+          "dtype": "bfloat16",
+          "layout": "ND"
+        },
+        {
+          "name": "recurrent__ssa_v0",
+          "direction": "InOut",
+          "shape": [
+            1,
+            48,
+            48,
+            128,
+            128
+          ],
+          "dtype": "fp32",
+          "layout": "ND"
+        },
+        {
+          "name": "slot__ssa_v0",
+          "direction": "In",
+          "shape": null,
+          "dtype": "index",
+          "layout": null
+        }
+      ],
+      "distributed_config": {
+        "device_ids": [
+          0
+        ],
+        "num_sub_workers": 0,
+        "runtime": "tensormap_and_ringbuffer",
+        "aicpu_thread_num": 0
+      },
+      "metadata_sha256": "4038e4bde5a9573a2128536bc2b4c2856a911ea2066d222502c0e8c0f2ca59a0"
+    },
+    "operators": {},
+    "ffn_phases": []
+  },
+  "compact_local": {
+    "spec": {
+      "module": "serving.long_context.qwen27b.compact_local",
+      "entrypoint": "compact_states_local_tile_fwd",
+      "original_CID": 10,
+      "parameter_count": 4,
+      "actual_functions": 2,
+      "params": [
+        {
+          "name": "conv__ssa_v0",
+          "direction": "InOut",
+          "shape": [
+            1,
+            983040
+          ],
+          "dtype": "int32",
+          "layout": "ND"
+        },
+        {
+          "name": "recurrent__ssa_v0",
+          "direction": "InOut",
+          "shape": [
+            1,
+            37748736
+          ],
+          "dtype": "int32",
+          "layout": "ND"
+        },
+        {
+          "name": "plan__ssa_v0",
+          "direction": "In",
+          "shape": [
+            12,
+            3
+          ],
+          "dtype": "int32",
+          "layout": "ND"
+        },
+        {
+          "name": "step_count__ssa_v0",
+          "direction": "In",
+          "shape": null,
+          "dtype": "int32",
+          "layout": null
+        }
+      ],
+      "distributed_config": {
+        "device_ids": [
+          0
+        ],
+        "num_sub_workers": 0,
+        "runtime": "tensormap_and_ringbuffer",
+        "aicpu_thread_num": 0
+      },
+      "metadata_sha256": "afbe8b333a3db7b86141d686253898c2b140306c48145ae7e3e2dcaed09e0d9a"
+    },
+    "operators": {},
+    "ffn_phases": []
+  },
+  "capture": {
+    "spec": {
+      "module": "serving.long_context.qwen27b.capture",
+      "entrypoint": "prefill_fwd",
+      "original_CID": 7,
+      "parameter_count": 47,
+      "actual_functions": 61,
+      "params": [
+        {
+          "name": "input_ids__ssa_v0",
+          "direction": "In",
+          "shape": [
+            1,
+            512
+          ],
+          "dtype": "int32",
+          "layout": "ND"
+        },
+        {
+          "name": "embedding__ssa_v0",
+          "direction": "In",
+          "shape": [
+            248320,
+            5120
+          ],
+          "dtype": "bfloat16",
+          "layout": "ND"
+        },
+        {
+          "name": "final_gamma__ssa_v0",
+          "direction": "In",
+          "shape": [
+            1,
+            5120
+          ],
+          "dtype": "fp32",
+          "layout": "ND"
+        },
+        {
+          "name": "lm_head__ssa_v0",
+          "direction": "In",
+          "shape": [
+            248320,
+            5120
+          ],
+          "dtype": "bfloat16",
+          "layout": "ND"
+        },
+        {
+          "name": "input_gamma__ssa_v0",
+          "direction": "In",
+          "shape": [
+            64,
+            5120
+          ],
+          "dtype": "fp32",
+          "layout": "ND"
+        },
+        {
+          "name": "post_gamma__ssa_v0",
+          "direction": "In",
+          "shape": [
+            64,
+            5120
+          ],
+          "dtype": "fp32",
+          "layout": "ND"
+        },
+        {
+          "name": "mlp_gate_weight__ssa_v0",
+          "direction": "In",
+          "shape": [
+            64,
+            1088,
+            320,
+            16,
+            16
+          ],
+          "dtype": "bfloat16",
+          "layout": "NZ"
+        },
+        {
+          "name": "mlp_up_weight__ssa_v0",
+          "direction": "In",
+          "shape": [
+            64,
+            1088,
+            320,
+            16,
+            16
+          ],
+          "dtype": "bfloat16",
+          "layout": "NZ"
+        },
+        {
+          "name": "mlp_down_weight__ssa_v0",
+          "direction": "In",
+          "shape": [
+            64,
+            320,
+            1088,
+            16,
+            16
+          ],
+          "dtype": "bfloat16",
+          "layout": "NZ"
+        },
+        {
+          "name": "delta_qkv_weight__ssa_v0",
+          "direction": "In",
+          "shape": [
+            48,
+            640,
+            320,
+            16,
+            16
+          ],
+          "dtype": "bfloat16",
+          "layout": "NZ"
+        },
+        {
+          "name": "delta_z_weight__ssa_v0",
+          "direction": "In",
+          "shape": [
+            48,
+            384,
+            320,
+            16,
+            16
+          ],
+          "dtype": "bfloat16",
+          "layout": "NZ"
+        },
+        {
+          "name": "delta_a_weight__ssa_v0",
+          "direction": "In",
+          "shape": [
+            48,
+            8,
+            320,
+            16,
+            16
+          ],
+          "dtype": "bfloat16",
+          "layout": "NZ"
+        },
+        {
+          "name": "delta_b_weight__ssa_v0",
+          "direction": "In",
+          "shape": [
+            48,
+            8,
+            320,
+            16,
+            16
+          ],
+          "dtype": "bfloat16",
+          "layout": "NZ"
+        },
+        {
+          "name": "delta_conv_weight__ssa_v0",
+          "direction": "In",
+          "shape": [
+            192,
+            10240
+          ],
+          "dtype": "bfloat16",
+          "layout": "ND"
+        },
+        {
+          "name": "delta_a_log__ssa_v0",
+          "direction": "In",
+          "shape": [
+            48,
+            64
+          ],
+          "dtype": "bfloat16",
+          "layout": "ND"
+        },
+        {
+          "name": "delta_dt_bias__ssa_v0",
+          "direction": "In",
+          "shape": [
+            48,
+            64
+          ],
+          "dtype": "bfloat16",
+          "layout": "ND"
+        },
+        {
+          "name": "delta_norm_weight__ssa_v0",
+          "direction": "In",
+          "shape": [
+            48,
+            128
+          ],
+          "dtype": "bfloat16",
+          "layout": "ND"
+        },
+        {
+          "name": "delta_out_weight__ssa_v0",
+          "direction": "In",
+          "shape": [
+            48,
+            320,
+            384,
+            16,
+            16
+          ],
+          "dtype": "bfloat16",
+          "layout": "NZ"
+        },
+        {
+          "name": "full_q_weight__ssa_v0",
+          "direction": "In",
+          "shape": [
+            16,
+            768,
+            320,
+            16,
+            16
+          ],
+          "dtype": "bfloat16",
+          "layout": "NZ"
+        },
+        {
+          "name": "full_k_weight__ssa_v0",
+          "direction": "In",
+          "shape": [
+            16,
+            64,
+            320,
+            16,
+            16
+          ],
+          "dtype": "bfloat16",
+          "layout": "NZ"
+        },
+        {
+          "name": "full_v_weight__ssa_v0",
+          "direction": "In",
+          "shape": [
+            16,
+            64,
+            320,
+            16,
+            16
+          ],
+          "dtype": "bfloat16",
+          "layout": "NZ"
+        },
+        {
+          "name": "full_q_gamma__ssa_v0",
+          "direction": "In",
+          "shape": [
+            16,
+            256
+          ],
+          "dtype": "fp32",
+          "layout": "ND"
+        },
+        {
+          "name": "full_k_gamma__ssa_v0",
+          "direction": "In",
+          "shape": [
+            16,
+            256
+          ],
+          "dtype": "fp32",
+          "layout": "ND"
+        },
+        {
+          "name": "full_out_weight__ssa_v0",
+          "direction": "In",
+          "shape": [
+            16,
+            320,
+            384,
+            16,
+            16
+          ],
+          "dtype": "bfloat16",
+          "layout": "NZ"
+        },
+        {
+          "name": "cos__ssa_v0",
+          "direction": "In",
+          "shape": [
+            1,
+            512,
+            64
+          ],
+          "dtype": "bfloat16",
+          "layout": "ND"
+        },
+        {
+          "name": "sin__ssa_v0",
+          "direction": "In",
+          "shape": [
+            1,
+            512,
+            64
+          ],
+          "dtype": "bfloat16",
+          "layout": "ND"
+        },
+        {
+          "name": "mask__ssa_v0",
+          "direction": "In",
+          "shape": [
+            1,
+            512,
+            32768
+          ],
+          "dtype": "fp32",
+          "layout": "ND"
+        },
+        {
+          "name": "token_counts__ssa_v0",
+          "direction": "In",
+          "shape": [
+            1
+          ],
+          "dtype": "int32",
+          "layout": "ND"
+        },
+        {
+          "name": "cache_offsets__ssa_v0",
+          "direction": "In",
+          "shape": [
+            1
+          ],
+          "dtype": "int32",
+          "layout": "ND"
+        },
+        {
+          "name": "conv_states__ssa_v0",
+          "direction": "InOut",
+          "shape": [
+            1,
+            48,
+            4,
+            10240
+          ],
+          "dtype": "bfloat16",
+          "layout": "ND"
+        },
+        {
+          "name": "recurrent_states__ssa_v0",
+          "direction": "InOut",
+          "shape": [
+            1,
+            48,
+            48,
+            128,
+            128
+          ],
+          "dtype": "fp32",
+          "layout": "ND"
+        },
+        {
+          "name": "key_pool__ssa_v0",
+          "direction": "InOut",
+          "shape": [
+            16,
+            1,
+            1025,
+            128,
+            256
+          ],
+          "dtype": "bfloat16",
+          "layout": "ND"
+        },
+        {
+          "name": "value_pool__ssa_v0",
+          "direction": "InOut",
+          "shape": [
+            16,
+            1,
+            1025,
+            128,
+            256
+          ],
+          "dtype": "bfloat16",
+          "layout": "ND"
+        },
+        {
+          "name": "block_tables__ssa_v0",
+          "direction": "In",
+          "shape": [
+            1,
+            2048
+          ],
+          "dtype": "int32",
+          "layout": "ND"
+        },
+        {
+          "name": "traces__ssa_v0",
+          "direction": "InOut",
+          "shape": [
+            1,
+            66,
+            512,
+            5120
+          ],
+          "dtype": "bfloat16",
+          "layout": "ND"
+        },
+        {
+          "name": "logits__ssa_v0",
+          "direction": "InOut",
+          "shape": [
+            1,
+            512,
+            248320
+          ],
+          "dtype": "bfloat16",
+          "layout": "ND"
+        },
+        {
+          "name": "active_count__ssa_v0",
+          "direction": "In",
+          "shape": null,
+          "dtype": "int32",
+          "layout": null
+        },
+        {
+          "name": "rk_bank",
+          "shape": [
+            32768,
+            4096
+          ],
+          "dtype": "bfloat16",
+          "direction": "InOut"
+        },
+        {
+          "name": "rk_mode",
+          "shape": null,
+          "dtype": "int32",
+          "direction": "In"
+        },
+        {
+          "name": "rk_start",
+          "shape": null,
+          "dtype": "int32",
+          "direction": "In"
+        },
+        {
+          "name": "rk_clean",
+          "shape": null,
+          "dtype": "int32",
+          "direction": "In"
+        },
+        {
+          "name": "rk_end",
+          "shape": null,
+          "dtype": "int32",
+          "direction": "In"
+        },
+        {
+          "name": "rk_windows",
+          "shape": [
+            48,
+            144
+          ],
+          "dtype": "int32",
+          "direction": "In"
+        },
+        {
+          "name": "rk_core",
+          "shape": [
+            1550336,
+            128
+          ],
+          "dtype": "bfloat16",
+          "direction": "InOut"
+        },
+        {
+          "name": "rk_state",
+          "shape": [
+            149376,
+            128
+          ],
+          "dtype": "fp32",
+          "direction": "InOut"
+        },
+        {
+          "name": "rk_scores",
+          "shape": [
+            64,
+            2048
+          ],
+          "dtype": "fp32",
+          "direction": "InOut"
+        },
+        {
+          "name": "rk_cutoffs",
+          "shape": [
+            64,
+            2048
+          ],
+          "dtype": "fp32",
+          "direction": "In"
+        }
+      ],
+      "distributed_config": {
+        "device_ids": [
+          0
+        ],
+        "num_sub_workers": 0,
+        "runtime": "tensormap_and_ringbuffer",
+        "aicpu_thread_num": 0
+      },
+      "metadata_sha256": "0d00a189fb7f51d247148dfdeae02c343851c58e32f4185a31c2f4d53a49f8db"
+    },
+    "operators": {
+      "attention": {
+        "roots": [
+          "prefill_attention_slots_inline_prefix512",
+          "prefill_delta_slots_inline_prefix512"
+        ],
+        "abi": {
+          "prefill_attention_slots_inline_prefix512": "queries: pl.Tensor, keys: pl.Tensor, values: pl.Tensor, q_gamma_full: pl.Tensor, k_gamma_full: pl.Tensor, cos_batch: pl.Tensor[[BATCH, ROWS, ROTARY], pl.BF16], sin_batch: pl.Tensor[[BATCH, ROWS, ROTARY], pl.BF16], masks: pl.Tensor, out_weight_full: pl.Tensor, key_pool: pl.Tensor, value_pool: pl.Tensor, block_tables: pl.Tensor, cache_offsets: pl.Tensor, token_counts: pl.Tensor, gated_batch: pl.Tensor, full: pl.Scalar[pl.INDEX], active_count: pl.Scalar[pl.INT32], rk_bank: pl.Tensor, rk_mode: pl.Scalar[pl.INT32], rk_start: pl.Scalar[pl.INT32], rk_clean: pl.Scalar[pl.INT32], rk_end: pl.Scalar[pl.INT32]",
+          "prefill_delta_slots_inline_prefix512": "qkv_batch: pl.Tensor, z_batch: pl.Tensor, a_batch: pl.Tensor, b_batch: pl.Tensor, conv_weight_layer: pl.Tensor, a_log_layer: pl.Tensor, dt_bias_layer: pl.Tensor, delta_norm_layer: pl.Tensor, delta_out_layer: pl.Tensor, conv_states: pl.Tensor, recurrent_states: pl.Tensor, gated_batch: pl.Tensor, linear: pl.Scalar[pl.INDEX], token_counts: pl.Tensor, active_count: pl.Scalar[pl.INT32], rk_windows: pl.Tensor[[48, 144], pl.INT32], rk_core: pl.Tensor, rk_state: pl.Tensor, rk_start: pl.Scalar[pl.INT32], rk_end: pl.Scalar[pl.INT32], rk_mode: pl.Scalar[pl.INT32], rk_offset: pl.Scalar[pl.INT32]"
+        },
+        "symbols": [
+          "attention3_prepare_normalize_head_inline",
+          "attention3_prepare_rotary_head_inline",
+          "delta_prepare_decay_beta_inline",
+          "panel_attention",
+          "prefill_attention_slots_inline_prefix512",
+          "prefill_batched_conv_inline_prefix512",
+          "prefill_delta_slots_inline_prefix512",
+          "prefill_direct_qkv_recurrence_inline",
+          "prefill_gated_tail_inline",
+          "prefill_load_paged_kv_inline",
+          "prefill_prepare_heads_inline"
+        ]
+      },
+      "ffn": {
+        "roots": [
+          "redknot_ffn_execute",
+          "redknot_ffn_initialize",
+          "redknot_ffn_prepare"
+        ],
+        "abi": {
+          "redknot_ffn_execute": "layer: pl.Scalar[pl.INDEX], rk_mode: pl.Scalar[pl.INT32], post_norm: pl.Tensor, mlp_gate_layer: pl.Tensor[[HIDDEN, INTERMEDIATE], pl.BF16, pl.NZ], keep: pl.Tensor, mlp_up_layer: pl.Tensor[[HIDDEN, INTERMEDIATE], pl.BF16, pl.NZ], mlp_down_layer: pl.Tensor[[INTERMEDIATE, HIDDEN], pl.BF16, pl.NZ], mlp_output: pl.Tensor, active_count: pl.Scalar[pl.INT32], residual: pl.Tensor, input_gamma: pl.Tensor, final_gamma: pl.Tensor, running: pl.Tensor, norm: pl.Tensor, traces: pl.Tensor",
+          "redknot_ffn_initialize": "cache_offsets: pl.Tensor, token_counts: pl.Tensor",
+          "redknot_ffn_prepare": "running: pl.Tensor, attention: pl.Tensor, post_gamma_layer: pl.Tensor[[1, HIDDEN], pl.FP32], residual: pl.Tensor, post_norm: pl.Tensor, layer: pl.Scalar[pl.INDEX], keep: pl.Tensor, rk_scores: pl.Tensor, rk_cutoffs: pl.Tensor[[64, 2048], pl.FP32], offset: pl.Scalar[pl.INT32], count: pl.Scalar[pl.INT32], rk_start: pl.Scalar[pl.INT32], rk_end: pl.Scalar[pl.INT32], rk_mode: pl.Scalar[pl.INT32]"
+        },
+        "symbols": [
+          "prefill_swiglu_inline_prefix512",
+          "prefill_up_swiglu_fused",
+          "redknot_ffn_execute",
+          "redknot_ffn_initialize",
+          "redknot_ffn_prepare",
+          "redknot_ffn_selection",
+          "redknot_sparse_projection",
+          "residual_next_norm_trace",
+          "residual_norm_fused_streaming"
+        ]
+      }
+    },
+    "ffn_phases": [
+      "redknot_ffn_execute",
+      "redknot_ffn_initialize",
+      "redknot_ffn_prepare"
+    ]
+  },
+  "tail16": {
+    "spec": {
+      "module": "serving.long_context.qwen27b.tail16",
+      "entrypoint": "prefill_fwd",
+      "original_CID": 0,
+      "parameter_count": 42,
+      "actual_functions": 57,
+      "params": [
+        {
+          "name": "input_ids__ssa_v0",
+          "direction": "In",
+          "shape": [
+            8,
+            16
+          ],
+          "dtype": "int32",
+          "layout": "ND"
+        },
+        {
+          "name": "embedding__ssa_v0",
+          "direction": "In",
+          "shape": [
+            248320,
+            5120
+          ],
+          "dtype": "bfloat16",
+          "layout": "ND"
+        },
+        {
+          "name": "final_gamma__ssa_v0",
+          "direction": "In",
+          "shape": [
+            1,
+            5120
+          ],
+          "dtype": "fp32",
+          "layout": "ND"
+        },
+        {
+          "name": "lm_head__ssa_v0",
+          "direction": "In",
+          "shape": [
+            248320,
+            5120
+          ],
+          "dtype": "bfloat16",
+          "layout": "ND"
+        },
+        {
+          "name": "input_gamma__ssa_v0",
+          "direction": "In",
+          "shape": [
+            64,
+            5120
+          ],
+          "dtype": "fp32",
+          "layout": "ND"
+        },
+        {
+          "name": "post_gamma__ssa_v0",
+          "direction": "In",
+          "shape": [
+            64,
+            5120
+          ],
+          "dtype": "fp32",
+          "layout": "ND"
+        },
+        {
+          "name": "mlp_gate_weight__ssa_v0",
+          "direction": "In",
+          "shape": [
+            64,
+            1088,
+            320,
+            16,
+            16
+          ],
+          "dtype": "bfloat16",
+          "layout": "NZ"
+        },
+        {
+          "name": "mlp_up_weight__ssa_v0",
+          "direction": "In",
+          "shape": [
+            64,
+            1088,
+            320,
+            16,
+            16
+          ],
+          "dtype": "bfloat16",
+          "layout": "NZ"
+        },
+        {
+          "name": "mlp_down_weight__ssa_v0",
+          "direction": "In",
+          "shape": [
+            64,
+            320,
+            1088,
+            16,
+            16
+          ],
+          "dtype": "bfloat16",
+          "layout": "NZ"
+        },
+        {
+          "name": "delta_qkv_weight__ssa_v0",
+          "direction": "In",
+          "shape": [
+            48,
+            640,
+            320,
+            16,
+            16
+          ],
+          "dtype": "bfloat16",
+          "layout": "NZ"
+        },
+        {
+          "name": "delta_z_weight__ssa_v0",
+          "direction": "In",
+          "shape": [
+            48,
+            384,
+            320,
+            16,
+            16
+          ],
+          "dtype": "bfloat16",
+          "layout": "NZ"
+        },
+        {
+          "name": "delta_a_weight__ssa_v0",
+          "direction": "In",
+          "shape": [
+            48,
+            8,
+            320,
+            16,
+            16
+          ],
+          "dtype": "bfloat16",
+          "layout": "NZ"
+        },
+        {
+          "name": "delta_b_weight__ssa_v0",
+          "direction": "In",
+          "shape": [
+            48,
+            8,
+            320,
+            16,
+            16
+          ],
+          "dtype": "bfloat16",
+          "layout": "NZ"
+        },
+        {
+          "name": "delta_conv_weight__ssa_v0",
+          "direction": "In",
+          "shape": [
+            192,
+            10240
+          ],
+          "dtype": "bfloat16",
+          "layout": "ND"
+        },
+        {
+          "name": "delta_a_log__ssa_v0",
+          "direction": "In",
+          "shape": [
+            48,
+            64
+          ],
+          "dtype": "bfloat16",
+          "layout": "ND"
+        },
+        {
+          "name": "delta_dt_bias__ssa_v0",
+          "direction": "In",
+          "shape": [
+            48,
+            64
+          ],
+          "dtype": "bfloat16",
+          "layout": "ND"
+        },
+        {
+          "name": "delta_norm_weight__ssa_v0",
+          "direction": "In",
+          "shape": [
+            48,
+            128
+          ],
+          "dtype": "bfloat16",
+          "layout": "ND"
+        },
+        {
+          "name": "delta_out_weight__ssa_v0",
+          "direction": "In",
+          "shape": [
+            48,
+            320,
+            384,
+            16,
+            16
+          ],
+          "dtype": "bfloat16",
+          "layout": "NZ"
+        },
+        {
+          "name": "full_q_weight__ssa_v0",
+          "direction": "In",
+          "shape": [
+            16,
+            768,
+            320,
+            16,
+            16
+          ],
+          "dtype": "bfloat16",
+          "layout": "NZ"
+        },
+        {
+          "name": "full_k_weight__ssa_v0",
+          "direction": "In",
+          "shape": [
+            16,
+            64,
+            320,
+            16,
+            16
+          ],
+          "dtype": "bfloat16",
+          "layout": "NZ"
+        },
+        {
+          "name": "full_v_weight__ssa_v0",
+          "direction": "In",
+          "shape": [
+            16,
+            64,
+            320,
+            16,
+            16
+          ],
+          "dtype": "bfloat16",
+          "layout": "NZ"
+        },
+        {
+          "name": "full_q_gamma__ssa_v0",
+          "direction": "In",
+          "shape": [
+            16,
+            256
+          ],
+          "dtype": "fp32",
+          "layout": "ND"
+        },
+        {
+          "name": "full_k_gamma__ssa_v0",
+          "direction": "In",
+          "shape": [
+            16,
+            256
+          ],
+          "dtype": "fp32",
+          "layout": "ND"
+        },
+        {
+          "name": "full_out_weight__ssa_v0",
+          "direction": "In",
+          "shape": [
+            16,
+            320,
+            384,
+            16,
+            16
+          ],
+          "dtype": "bfloat16",
+          "layout": "NZ"
+        },
+        {
+          "name": "cos__ssa_v0",
+          "direction": "In",
+          "shape": [
+            8,
+            16,
+            64
+          ],
+          "dtype": "bfloat16",
+          "layout": "ND"
+        },
+        {
+          "name": "sin__ssa_v0",
+          "direction": "In",
+          "shape": [
+            8,
+            16,
+            64
+          ],
+          "dtype": "bfloat16",
+          "layout": "ND"
+        },
+        {
+          "name": "mask__ssa_v0",
+          "direction": "In",
+          "shape": [
+            8,
+            16,
+            32768
+          ],
+          "dtype": "fp32",
+          "layout": "ND"
+        },
+        {
+          "name": "token_counts__ssa_v0",
+          "direction": "In",
+          "shape": [
+            8
+          ],
+          "dtype": "int32",
+          "layout": "ND"
+        },
+        {
+          "name": "cache_offsets__ssa_v0",
+          "direction": "In",
+          "shape": [
+            8
+          ],
+          "dtype": "int32",
+          "layout": "ND"
+        },
+        {
+          "name": "conv_states__ssa_v0",
+          "direction": "InOut",
+          "shape": [
+            1,
+            48,
+            4,
+            10240
+          ],
+          "dtype": "bfloat16",
+          "layout": "ND"
+        },
+        {
+          "name": "recurrent_states__ssa_v0",
+          "direction": "InOut",
+          "shape": [
+            1,
+            48,
+            48,
+            128,
+            128
+          ],
+          "dtype": "fp32",
+          "layout": "ND"
+        },
+        {
+          "name": "key_pool__ssa_v0",
+          "direction": "InOut",
+          "shape": [
+            16,
+            1,
+            1025,
+            128,
+            256
+          ],
+          "dtype": "bfloat16",
+          "layout": "ND"
+        },
+        {
+          "name": "value_pool__ssa_v0",
+          "direction": "InOut",
+          "shape": [
+            16,
+            1,
+            1025,
+            128,
+            256
+          ],
+          "dtype": "bfloat16",
+          "layout": "ND"
+        },
+        {
+          "name": "block_tables__ssa_v0",
+          "direction": "In",
+          "shape": [
+            8,
+            2048
+          ],
+          "dtype": "int32",
+          "layout": "ND"
+        },
+        {
+          "name": "traces__ssa_v0",
+          "direction": "InOut",
+          "shape": [
+            8,
+            66,
+            16,
+            5120
+          ],
+          "dtype": "bfloat16",
+          "layout": "ND"
+        },
+        {
+          "name": "logits__ssa_v0",
+          "direction": "Out",
+          "shape": [
+            8,
+            16,
+            248320
+          ],
+          "dtype": "bfloat16",
+          "layout": "ND"
+        },
+        {
+          "name": "active_count__ssa_v0",
+          "direction": "In",
+          "shape": null,
+          "dtype": "int32",
+          "layout": null
+        },
+        {
+          "name": "rk_bank",
+          "shape": [
+            32768,
+            4096
+          ],
+          "dtype": "bfloat16",
+          "direction": "InOut"
+        },
+        {
+          "name": "rk_mode",
+          "shape": null,
+          "dtype": "int32",
+          "direction": "In"
+        },
+        {
+          "name": "rk_start",
+          "shape": null,
+          "dtype": "int32",
+          "direction": "In"
+        },
+        {
+          "name": "rk_clean",
+          "shape": null,
+          "dtype": "int32",
+          "direction": "In"
+        },
+        {
+          "name": "rk_end",
+          "shape": null,
+          "dtype": "int32",
+          "direction": "In"
+        }
+      ],
+      "distributed_config": {
+        "device_ids": [
+          0
+        ],
+        "num_sub_workers": 0,
+        "runtime": "tensormap_and_ringbuffer",
+        "aicpu_thread_num": 0
+      },
+      "metadata_sha256": "0cd21eacde918264018ce35327a258c279890fa94368f562b6315b16224e4dfe"
+    },
+    "operators": {
+      "attention": {
+        "roots": [
+          "prefill_attention_slots_inline",
+          "prefill_delta_slots_inline"
+        ],
+        "abi": {
+          "prefill_attention_slots_inline": "queries: pl.Tensor, keys: pl.Tensor, values: pl.Tensor, q_gamma_full: pl.Tensor, k_gamma_full: pl.Tensor, cos_batch: pl.Tensor[[BATCH, ROWS, ROTARY], pl.BF16], sin_batch: pl.Tensor[[BATCH, ROWS, ROTARY], pl.BF16], masks: pl.Tensor, out_weight_full: pl.Tensor, key_pool: pl.Tensor, value_pool: pl.Tensor, block_tables: pl.Tensor, cache_offsets: pl.Tensor, token_counts: pl.Tensor, gated_batch: pl.Tensor, full: pl.Scalar[pl.INDEX], active_count: pl.Scalar[pl.INT32], rk_bank: pl.InOut[pl.Tensor[[32768, 4096], pl.BF16]], rk_mode: pl.Scalar[pl.INT32], rk_start: pl.Scalar[pl.INT32], rk_clean: pl.Scalar[pl.INT32], rk_end: pl.Scalar[pl.INT32]",
+          "prefill_delta_slots_inline": "qkv_batch: pl.Tensor, z_batch: pl.Tensor, a_batch: pl.Tensor, b_batch: pl.Tensor, conv_weight_layer: pl.Tensor, a_log_layer: pl.Tensor, dt_bias_layer: pl.Tensor, delta_norm_layer: pl.Tensor, delta_out_layer: pl.Tensor, conv_states: pl.Tensor, recurrent_states: pl.Tensor, gated_batch: pl.Tensor, linear: pl.Scalar[pl.INDEX], token_counts: pl.Tensor, active_count: pl.Scalar[pl.INT32]"
+        },
+        "symbols": [
+          "panel_attention",
+          "prefill_attention_slots_inline",
+          "prefill_batched_conv_inline",
+          "prefill_delta_slots_inline",
+          "prefill_direct_qkv_recurrence_inline",
+          "prefill_gated_tail_inline",
+          "prefill_load_paged_kv_inline",
+          "prefill_prepare_heads_inline"
+        ]
+      }
+    },
+    "ffn_phases": []
+  },
+  "tail64": {
+    "spec": {
+      "module": "serving.long_context.qwen27b.tail64",
+      "entrypoint": "prefill_fwd",
+      "original_CID": 8,
+      "parameter_count": 42,
+      "actual_functions": 520,
+      "params": [
+        {
+          "name": "input_ids__ssa_v0",
+          "direction": "In",
+          "shape": [
+            8,
+            64
+          ],
+          "dtype": "int32",
+          "layout": "ND"
+        },
+        {
+          "name": "embedding__ssa_v0",
+          "direction": "In",
+          "shape": [
+            248320,
+            5120
+          ],
+          "dtype": "bfloat16",
+          "layout": "ND"
+        },
+        {
+          "name": "final_gamma__ssa_v0",
+          "direction": "In",
+          "shape": [
+            1,
+            5120
+          ],
+          "dtype": "fp32",
+          "layout": "ND"
+        },
+        {
+          "name": "lm_head__ssa_v0",
+          "direction": "In",
+          "shape": [
+            248320,
+            5120
+          ],
+          "dtype": "bfloat16",
+          "layout": "ND"
+        },
+        {
+          "name": "input_gamma__ssa_v0",
+          "direction": "In",
+          "shape": [
+            64,
+            5120
+          ],
+          "dtype": "fp32",
+          "layout": "ND"
+        },
+        {
+          "name": "post_gamma__ssa_v0",
+          "direction": "In",
+          "shape": [
+            64,
+            5120
+          ],
+          "dtype": "fp32",
+          "layout": "ND"
+        },
+        {
+          "name": "mlp_gate_weight__ssa_v0",
+          "direction": "In",
+          "shape": [
+            64,
+            1088,
+            320,
+            16,
+            16
+          ],
+          "dtype": "bfloat16",
+          "layout": "NZ"
+        },
+        {
+          "name": "mlp_up_weight__ssa_v0",
+          "direction": "In",
+          "shape": [
+            64,
+            1088,
+            320,
+            16,
+            16
+          ],
+          "dtype": "bfloat16",
+          "layout": "NZ"
+        },
+        {
+          "name": "mlp_down_weight__ssa_v0",
+          "direction": "In",
+          "shape": [
+            64,
+            320,
+            1088,
+            16,
+            16
+          ],
+          "dtype": "bfloat16",
+          "layout": "NZ"
+        },
+        {
+          "name": "delta_qkv_weight__ssa_v0",
+          "direction": "In",
+          "shape": [
+            48,
+            640,
+            320,
+            16,
+            16
+          ],
+          "dtype": "bfloat16",
+          "layout": "NZ"
+        },
+        {
+          "name": "delta_z_weight__ssa_v0",
+          "direction": "In",
+          "shape": [
+            48,
+            384,
+            320,
+            16,
+            16
+          ],
+          "dtype": "bfloat16",
+          "layout": "NZ"
+        },
+        {
+          "name": "delta_a_weight__ssa_v0",
+          "direction": "In",
+          "shape": [
+            48,
+            8,
+            320,
+            16,
+            16
+          ],
+          "dtype": "bfloat16",
+          "layout": "NZ"
+        },
+        {
+          "name": "delta_b_weight__ssa_v0",
+          "direction": "In",
+          "shape": [
+            48,
+            8,
+            320,
+            16,
+            16
+          ],
+          "dtype": "bfloat16",
+          "layout": "NZ"
+        },
+        {
+          "name": "delta_conv_weight__ssa_v0",
+          "direction": "In",
+          "shape": [
+            192,
+            10240
+          ],
+          "dtype": "bfloat16",
+          "layout": "ND"
+        },
+        {
+          "name": "delta_a_log__ssa_v0",
+          "direction": "In",
+          "shape": [
+            48,
+            64
+          ],
+          "dtype": "bfloat16",
+          "layout": "ND"
+        },
+        {
+          "name": "delta_dt_bias__ssa_v0",
+          "direction": "In",
+          "shape": [
+            48,
+            64
+          ],
+          "dtype": "bfloat16",
+          "layout": "ND"
+        },
+        {
+          "name": "delta_norm_weight__ssa_v0",
+          "direction": "In",
+          "shape": [
+            48,
+            128
+          ],
+          "dtype": "bfloat16",
+          "layout": "ND"
+        },
+        {
+          "name": "delta_out_weight__ssa_v0",
+          "direction": "In",
+          "shape": [
+            48,
+            320,
+            384,
+            16,
+            16
+          ],
+          "dtype": "bfloat16",
+          "layout": "NZ"
+        },
+        {
+          "name": "full_q_weight__ssa_v0",
+          "direction": "In",
+          "shape": [
+            16,
+            768,
+            320,
+            16,
+            16
+          ],
+          "dtype": "bfloat16",
+          "layout": "NZ"
+        },
+        {
+          "name": "full_k_weight__ssa_v0",
+          "direction": "In",
+          "shape": [
+            16,
+            64,
+            320,
+            16,
+            16
+          ],
+          "dtype": "bfloat16",
+          "layout": "NZ"
+        },
+        {
+          "name": "full_v_weight__ssa_v0",
+          "direction": "In",
+          "shape": [
+            16,
+            64,
+            320,
+            16,
+            16
+          ],
+          "dtype": "bfloat16",
+          "layout": "NZ"
+        },
+        {
+          "name": "full_q_gamma__ssa_v0",
+          "direction": "In",
+          "shape": [
+            16,
+            256
+          ],
+          "dtype": "fp32",
+          "layout": "ND"
+        },
+        {
+          "name": "full_k_gamma__ssa_v0",
+          "direction": "In",
+          "shape": [
+            16,
+            256
+          ],
+          "dtype": "fp32",
+          "layout": "ND"
+        },
+        {
+          "name": "full_out_weight__ssa_v0",
+          "direction": "In",
+          "shape": [
+            16,
+            320,
+            384,
+            16,
+            16
+          ],
+          "dtype": "bfloat16",
+          "layout": "NZ"
+        },
+        {
+          "name": "cos__ssa_v0",
+          "direction": "In",
+          "shape": [
+            8,
+            64,
+            64
+          ],
+          "dtype": "bfloat16",
+          "layout": "ND"
+        },
+        {
+          "name": "sin__ssa_v0",
+          "direction": "In",
+          "shape": [
+            8,
+            64,
+            64
+          ],
+          "dtype": "bfloat16",
+          "layout": "ND"
+        },
+        {
+          "name": "mask__ssa_v0",
+          "direction": "In",
+          "shape": [
+            8,
+            64,
+            32768
+          ],
+          "dtype": "fp32",
+          "layout": "ND"
+        },
+        {
+          "name": "token_counts__ssa_v0",
+          "direction": "In",
+          "shape": [
+            8
+          ],
+          "dtype": "int32",
+          "layout": "ND"
+        },
+        {
+          "name": "cache_offsets__ssa_v0",
+          "direction": "In",
+          "shape": [
+            8
+          ],
+          "dtype": "int32",
+          "layout": "ND"
+        },
+        {
+          "name": "conv_states__ssa_v0",
+          "direction": "InOut",
+          "shape": [
+            1,
+            48,
+            4,
+            10240
+          ],
+          "dtype": "bfloat16",
+          "layout": "ND"
+        },
+        {
+          "name": "recurrent_states__ssa_v0",
+          "direction": "InOut",
+          "shape": [
+            1,
+            48,
+            48,
+            128,
+            128
+          ],
+          "dtype": "fp32",
+          "layout": "ND"
+        },
+        {
+          "name": "key_pool__ssa_v0",
+          "direction": "InOut",
+          "shape": [
+            16,
+            1,
+            1025,
+            128,
+            256
+          ],
+          "dtype": "bfloat16",
+          "layout": "ND"
+        },
+        {
+          "name": "value_pool__ssa_v0",
+          "direction": "InOut",
+          "shape": [
+            16,
+            1,
+            1025,
+            128,
+            256
+          ],
+          "dtype": "bfloat16",
+          "layout": "ND"
+        },
+        {
+          "name": "block_tables__ssa_v0",
+          "direction": "In",
+          "shape": [
+            8,
+            2048
+          ],
+          "dtype": "int32",
+          "layout": "ND"
+        },
+        {
+          "name": "traces__ssa_v0",
+          "direction": "InOut",
+          "shape": [
+            8,
+            66,
+            64,
+            5120
+          ],
+          "dtype": "bfloat16",
+          "layout": "ND"
+        },
+        {
+          "name": "logits__ssa_v0",
+          "direction": "InOut",
+          "shape": [
+            8,
+            64,
+            248320
+          ],
+          "dtype": "bfloat16",
+          "layout": "ND"
+        },
+        {
+          "name": "active_count__ssa_v0",
+          "direction": "In",
+          "shape": null,
+          "dtype": "int32",
+          "layout": null
+        },
+        {
+          "name": "rk_bank",
+          "shape": [
+            32768,
+            4096
+          ],
+          "dtype": "bfloat16",
+          "direction": "InOut"
+        },
+        {
+          "name": "rk_mode",
+          "shape": null,
+          "dtype": "int32",
+          "direction": "In"
+        },
+        {
+          "name": "rk_start",
+          "shape": null,
+          "dtype": "int32",
+          "direction": "In"
+        },
+        {
+          "name": "rk_clean",
+          "shape": null,
+          "dtype": "int32",
+          "direction": "In"
+        },
+        {
+          "name": "rk_end",
+          "shape": null,
+          "dtype": "int32",
+          "direction": "In"
+        }
+      ],
+      "distributed_config": {
+        "device_ids": [
+          0
+        ],
+        "num_sub_workers": 0,
+        "runtime": "tensormap_and_ringbuffer",
+        "aicpu_thread_num": 0
+      },
+      "metadata_sha256": "77865563413f0dfee0dd88dbd4b5b6f3f45b5ea2f0e3cbd082430e283e538155"
+    },
+    "operators": {
+      "attention": {
+        "roots": [
+          "prefill_attention_slots_inline_prefix128",
+          "prefill_attention_slots_inline_prefix256",
+          "prefill_attention_slots_inline_prefix384",
+          "prefill_attention_slots_inline_prefix512",
+          "prefill_delta_slots_inline_prefix128",
+          "prefill_delta_slots_inline_prefix256",
+          "prefill_delta_slots_inline_prefix384",
+          "prefill_delta_slots_inline_prefix512"
+        ],
+        "abi": {
+          "prefill_attention_slots_inline_prefix128": "queries: pl.Tensor, keys: pl.Tensor, values: pl.Tensor, q_gamma_full: pl.Tensor, k_gamma_full: pl.Tensor, cos_batch: pl.Tensor[[BATCH, ROWS, ROTARY], pl.BF16], sin_batch: pl.Tensor[[BATCH, ROWS, ROTARY], pl.BF16], masks: pl.Tensor, out_weight_full: pl.Tensor, key_pool: pl.Tensor, value_pool: pl.Tensor, block_tables: pl.Tensor, cache_offsets: pl.Tensor, token_counts: pl.Tensor, gated_batch: pl.Tensor, full: pl.Scalar[pl.INDEX], active_count: pl.Scalar[pl.INT32], rk_bank: pl.InOut[pl.Tensor[[32768, 4096], pl.BF16]], rk_mode: pl.Scalar[pl.INT32], rk_start: pl.Scalar[pl.INT32], rk_clean: pl.Scalar[pl.INT32], rk_end: pl.Scalar[pl.INT32]",
+          "prefill_attention_slots_inline_prefix256": "queries: pl.Tensor, keys: pl.Tensor, values: pl.Tensor, q_gamma_full: pl.Tensor, k_gamma_full: pl.Tensor, cos_batch: pl.Tensor[[BATCH, ROWS, ROTARY], pl.BF16], sin_batch: pl.Tensor[[BATCH, ROWS, ROTARY], pl.BF16], masks: pl.Tensor, out_weight_full: pl.Tensor, key_pool: pl.Tensor, value_pool: pl.Tensor, block_tables: pl.Tensor, cache_offsets: pl.Tensor, token_counts: pl.Tensor, gated_batch: pl.Tensor, full: pl.Scalar[pl.INDEX], active_count: pl.Scalar[pl.INT32], rk_bank: pl.InOut[pl.Tensor[[32768, 4096], pl.BF16]], rk_mode: pl.Scalar[pl.INT32], rk_start: pl.Scalar[pl.INT32], rk_clean: pl.Scalar[pl.INT32], rk_end: pl.Scalar[pl.INT32]",
+          "prefill_attention_slots_inline_prefix384": "queries: pl.Tensor, keys: pl.Tensor, values: pl.Tensor, q_gamma_full: pl.Tensor, k_gamma_full: pl.Tensor, cos_batch: pl.Tensor[[BATCH, ROWS, ROTARY], pl.BF16], sin_batch: pl.Tensor[[BATCH, ROWS, ROTARY], pl.BF16], masks: pl.Tensor, out_weight_full: pl.Tensor, key_pool: pl.Tensor, value_pool: pl.Tensor, block_tables: pl.Tensor, cache_offsets: pl.Tensor, token_counts: pl.Tensor, gated_batch: pl.Tensor, full: pl.Scalar[pl.INDEX], active_count: pl.Scalar[pl.INT32], rk_bank: pl.InOut[pl.Tensor[[32768, 4096], pl.BF16]], rk_mode: pl.Scalar[pl.INT32], rk_start: pl.Scalar[pl.INT32], rk_clean: pl.Scalar[pl.INT32], rk_end: pl.Scalar[pl.INT32]",
+          "prefill_attention_slots_inline_prefix512": "queries: pl.Tensor, keys: pl.Tensor, values: pl.Tensor, q_gamma_full: pl.Tensor, k_gamma_full: pl.Tensor, cos_batch: pl.Tensor[[BATCH, ROWS, ROTARY], pl.BF16], sin_batch: pl.Tensor[[BATCH, ROWS, ROTARY], pl.BF16], masks: pl.Tensor, out_weight_full: pl.Tensor, key_pool: pl.Tensor, value_pool: pl.Tensor, block_tables: pl.Tensor, cache_offsets: pl.Tensor, token_counts: pl.Tensor, gated_batch: pl.Tensor, full: pl.Scalar[pl.INDEX], active_count: pl.Scalar[pl.INT32], rk_bank: pl.InOut[pl.Tensor[[32768, 4096], pl.BF16]], rk_mode: pl.Scalar[pl.INT32], rk_start: pl.Scalar[pl.INT32], rk_clean: pl.Scalar[pl.INT32], rk_end: pl.Scalar[pl.INT32]",
+          "prefill_delta_slots_inline_prefix128": "qkv_batch: pl.Tensor, z_batch: pl.Tensor, a_batch: pl.Tensor, b_batch: pl.Tensor, conv_weight_layer: pl.Tensor, a_log_layer: pl.Tensor, dt_bias_layer: pl.Tensor, delta_norm_layer: pl.Tensor, delta_out_layer: pl.Tensor, conv_states: pl.Tensor, recurrent_states: pl.Tensor, gated_batch: pl.Tensor, linear: pl.Scalar[pl.INDEX], token_counts: pl.Tensor, active_count: pl.Scalar[pl.INT32]",
+          "prefill_delta_slots_inline_prefix256": "qkv_batch: pl.Tensor, z_batch: pl.Tensor, a_batch: pl.Tensor, b_batch: pl.Tensor, conv_weight_layer: pl.Tensor, a_log_layer: pl.Tensor, dt_bias_layer: pl.Tensor, delta_norm_layer: pl.Tensor, delta_out_layer: pl.Tensor, conv_states: pl.Tensor, recurrent_states: pl.Tensor, gated_batch: pl.Tensor, linear: pl.Scalar[pl.INDEX], token_counts: pl.Tensor, active_count: pl.Scalar[pl.INT32]",
+          "prefill_delta_slots_inline_prefix384": "qkv_batch: pl.Tensor, z_batch: pl.Tensor, a_batch: pl.Tensor, b_batch: pl.Tensor, conv_weight_layer: pl.Tensor, a_log_layer: pl.Tensor, dt_bias_layer: pl.Tensor, delta_norm_layer: pl.Tensor, delta_out_layer: pl.Tensor, conv_states: pl.Tensor, recurrent_states: pl.Tensor, gated_batch: pl.Tensor, linear: pl.Scalar[pl.INDEX], token_counts: pl.Tensor, active_count: pl.Scalar[pl.INT32]",
+          "prefill_delta_slots_inline_prefix512": "qkv_batch: pl.Tensor, z_batch: pl.Tensor, a_batch: pl.Tensor, b_batch: pl.Tensor, conv_weight_layer: pl.Tensor, a_log_layer: pl.Tensor, dt_bias_layer: pl.Tensor, delta_norm_layer: pl.Tensor, delta_out_layer: pl.Tensor, conv_states: pl.Tensor, recurrent_states: pl.Tensor, gated_batch: pl.Tensor, linear: pl.Scalar[pl.INDEX], token_counts: pl.Tensor, active_count: pl.Scalar[pl.INT32]"
+        },
+        "symbols": [
+          "attention3_prepare_normalize_head_inline",
+          "attention3_prepare_rotary_head_inline",
+          "delta_prepare_decay_beta_inline",
+          "panel_attention",
+          "prefill_attention_slots_inline_prefix128",
+          "prefill_attention_slots_inline_prefix256",
+          "prefill_attention_slots_inline_prefix384",
+          "prefill_attention_slots_inline_prefix512",
+          "prefill_batched_conv_inline_prefix128",
+          "prefill_batched_conv_inline_prefix256",
+          "prefill_batched_conv_inline_prefix384",
+          "prefill_batched_conv_inline_prefix512",
+          "prefill_delta_slots_inline_prefix128",
+          "prefill_delta_slots_inline_prefix256",
+          "prefill_delta_slots_inline_prefix384",
+          "prefill_delta_slots_inline_prefix512",
+          "prefill_direct_qkv_recurrence_inline",
+          "prefill_gated_tail_inline",
+          "prefill_load_paged_kv_inline",
+          "prefill_prepare_heads_inline"
+        ]
+      }
+    },
+    "ffn_phases": []
+  },
+  "hit_causal": {
+    "spec": {
+      "module": "serving.long_context.qwen27b.hit_causal",
+      "entrypoint": "prefill_fwd",
+      "original_CID": 7,
+      "parameter_count": 46,
+      "actual_functions": 61,
+      "params": [
+        {
+          "name": "input_ids__ssa_v0",
+          "direction": "In",
+          "shape": [
+            1,
+            512
+          ],
+          "dtype": "int32",
+          "layout": "ND"
+        },
+        {
+          "name": "embedding__ssa_v0",
+          "direction": "In",
+          "shape": [
+            248320,
+            5120
+          ],
+          "dtype": "bfloat16",
+          "layout": "ND"
+        },
+        {
+          "name": "final_gamma__ssa_v0",
+          "direction": "In",
+          "shape": [
+            1,
+            5120
+          ],
+          "dtype": "fp32",
+          "layout": "ND"
+        },
+        {
+          "name": "lm_head__ssa_v0",
+          "direction": "In",
+          "shape": [
+            248320,
+            5120
+          ],
+          "dtype": "bfloat16",
+          "layout": "ND"
+        },
+        {
+          "name": "input_gamma__ssa_v0",
+          "direction": "In",
+          "shape": [
+            64,
+            5120
+          ],
+          "dtype": "fp32",
+          "layout": "ND"
+        },
+        {
+          "name": "post_gamma__ssa_v0",
+          "direction": "In",
+          "shape": [
+            64,
+            5120
+          ],
+          "dtype": "fp32",
+          "layout": "ND"
+        },
+        {
+          "name": "mlp_gate_weight__ssa_v0",
+          "direction": "In",
+          "shape": [
+            64,
+            1088,
+            320,
+            16,
+            16
+          ],
+          "dtype": "bfloat16",
+          "layout": "NZ"
+        },
+        {
+          "name": "mlp_up_weight__ssa_v0",
+          "direction": "In",
+          "shape": [
+            64,
+            1088,
+            320,
+            16,
+            16
+          ],
+          "dtype": "bfloat16",
+          "layout": "NZ"
+        },
+        {
+          "name": "mlp_down_weight__ssa_v0",
+          "direction": "In",
+          "shape": [
+            64,
+            320,
+            1088,
+            16,
+            16
+          ],
+          "dtype": "bfloat16",
+          "layout": "NZ"
+        },
+        {
+          "name": "delta_qkv_weight__ssa_v0",
+          "direction": "In",
+          "shape": [
+            48,
+            640,
+            320,
+            16,
+            16
+          ],
+          "dtype": "bfloat16",
+          "layout": "NZ"
+        },
+        {
+          "name": "delta_z_weight__ssa_v0",
+          "direction": "In",
+          "shape": [
+            48,
+            384,
+            320,
+            16,
+            16
+          ],
+          "dtype": "bfloat16",
+          "layout": "NZ"
+        },
+        {
+          "name": "delta_a_weight__ssa_v0",
+          "direction": "In",
+          "shape": [
+            48,
+            8,
+            320,
+            16,
+            16
+          ],
+          "dtype": "bfloat16",
+          "layout": "NZ"
+        },
+        {
+          "name": "delta_b_weight__ssa_v0",
+          "direction": "In",
+          "shape": [
+            48,
+            8,
+            320,
+            16,
+            16
+          ],
+          "dtype": "bfloat16",
+          "layout": "NZ"
+        },
+        {
+          "name": "delta_conv_weight__ssa_v0",
+          "direction": "In",
+          "shape": [
+            192,
+            10240
+          ],
+          "dtype": "bfloat16",
+          "layout": "ND"
+        },
+        {
+          "name": "delta_a_log__ssa_v0",
+          "direction": "In",
+          "shape": [
+            48,
+            64
+          ],
+          "dtype": "bfloat16",
+          "layout": "ND"
+        },
+        {
+          "name": "delta_dt_bias__ssa_v0",
+          "direction": "In",
+          "shape": [
+            48,
+            64
+          ],
+          "dtype": "bfloat16",
+          "layout": "ND"
+        },
+        {
+          "name": "delta_norm_weight__ssa_v0",
+          "direction": "In",
+          "shape": [
+            48,
+            128
+          ],
+          "dtype": "bfloat16",
+          "layout": "ND"
+        },
+        {
+          "name": "delta_out_weight__ssa_v0",
+          "direction": "In",
+          "shape": [
+            48,
+            320,
+            384,
+            16,
+            16
+          ],
+          "dtype": "bfloat16",
+          "layout": "NZ"
+        },
+        {
+          "name": "full_q_weight__ssa_v0",
+          "direction": "In",
+          "shape": [
+            16,
+            768,
+            320,
+            16,
+            16
+          ],
+          "dtype": "bfloat16",
+          "layout": "NZ"
+        },
+        {
+          "name": "full_k_weight__ssa_v0",
+          "direction": "In",
+          "shape": [
+            16,
+            64,
+            320,
+            16,
+            16
+          ],
+          "dtype": "bfloat16",
+          "layout": "NZ"
+        },
+        {
+          "name": "full_v_weight__ssa_v0",
+          "direction": "In",
+          "shape": [
+            16,
+            64,
+            320,
+            16,
+            16
+          ],
+          "dtype": "bfloat16",
+          "layout": "NZ"
+        },
+        {
+          "name": "full_q_gamma__ssa_v0",
+          "direction": "In",
+          "shape": [
+            16,
+            256
+          ],
+          "dtype": "fp32",
+          "layout": "ND"
+        },
+        {
+          "name": "full_k_gamma__ssa_v0",
+          "direction": "In",
+          "shape": [
+            16,
+            256
+          ],
+          "dtype": "fp32",
+          "layout": "ND"
+        },
+        {
+          "name": "full_out_weight__ssa_v0",
+          "direction": "In",
+          "shape": [
+            16,
+            320,
+            384,
+            16,
+            16
+          ],
+          "dtype": "bfloat16",
+          "layout": "NZ"
+        },
+        {
+          "name": "cos__ssa_v0",
+          "direction": "In",
+          "shape": [
+            1,
+            512,
+            64
+          ],
+          "dtype": "bfloat16",
+          "layout": "ND"
+        },
+        {
+          "name": "sin__ssa_v0",
+          "direction": "In",
+          "shape": [
+            1,
+            512,
+            64
+          ],
+          "dtype": "bfloat16",
+          "layout": "ND"
+        },
+        {
+          "name": "token_counts__ssa_v0",
+          "direction": "In",
+          "shape": [
+            1
+          ],
+          "dtype": "int32",
+          "layout": "ND"
+        },
+        {
+          "name": "cache_offsets__ssa_v0",
+          "direction": "In",
+          "shape": [
+            1
+          ],
+          "dtype": "int32",
+          "layout": "ND"
+        },
+        {
+          "name": "conv_states__ssa_v0",
+          "direction": "InOut",
+          "shape": [
+            1,
+            48,
+            4,
+            10240
+          ],
+          "dtype": "bfloat16",
+          "layout": "ND"
+        },
+        {
+          "name": "recurrent_states__ssa_v0",
+          "direction": "InOut",
+          "shape": [
+            1,
+            48,
+            48,
+            128,
+            128
+          ],
+          "dtype": "fp32",
+          "layout": "ND"
+        },
+        {
+          "name": "key_pool__ssa_v0",
+          "direction": "InOut",
+          "shape": [
+            16,
+            1,
+            1025,
+            128,
+            256
+          ],
+          "dtype": "bfloat16",
+          "layout": "ND"
+        },
+        {
+          "name": "value_pool__ssa_v0",
+          "direction": "InOut",
+          "shape": [
+            16,
+            1,
+            1025,
+            128,
+            256
+          ],
+          "dtype": "bfloat16",
+          "layout": "ND"
+        },
+        {
+          "name": "block_tables__ssa_v0",
+          "direction": "In",
+          "shape": [
+            1,
+            2048
+          ],
+          "dtype": "int32",
+          "layout": "ND"
+        },
+        {
+          "name": "traces__ssa_v0",
+          "direction": "InOut",
+          "shape": [
+            1,
+            66,
+            512,
+            5120
+          ],
+          "dtype": "bfloat16",
+          "layout": "ND"
+        },
+        {
+          "name": "logits__ssa_v0",
+          "direction": "InOut",
+          "shape": [
+            1,
+            512,
+            248320
+          ],
+          "dtype": "bfloat16",
+          "layout": "ND"
+        },
+        {
+          "name": "active_count__ssa_v0",
+          "direction": "In",
+          "shape": null,
+          "dtype": "int32",
+          "layout": null
+        },
+        {
+          "name": "rk_bank",
+          "shape": [
+            32768,
+            4096
+          ],
+          "dtype": "bfloat16",
+          "direction": "InOut"
+        },
+        {
+          "name": "rk_mode",
+          "shape": null,
+          "dtype": "int32",
+          "direction": "In"
+        },
+        {
+          "name": "rk_start",
+          "shape": null,
+          "dtype": "int32",
+          "direction": "In"
+        },
+        {
+          "name": "rk_clean",
+          "shape": null,
+          "dtype": "int32",
+          "direction": "In"
+        },
+        {
+          "name": "rk_end",
+          "shape": null,
+          "dtype": "int32",
+          "direction": "In"
+        },
+        {
+          "name": "rk_windows",
+          "shape": [
+            48,
+            144
+          ],
+          "dtype": "int32",
+          "direction": "In"
+        },
+        {
+          "name": "rk_core",
+          "shape": [
+            1550336,
+            128
+          ],
+          "dtype": "bfloat16",
+          "direction": "InOut"
+        },
+        {
+          "name": "rk_state",
+          "shape": [
+            149376,
+            128
+          ],
+          "dtype": "fp32",
+          "direction": "InOut"
+        },
+        {
+          "name": "rk_scores",
+          "shape": [
+            64,
+            2048
+          ],
+          "dtype": "fp32",
+          "direction": "InOut"
+        },
+        {
+          "name": "rk_cutoffs",
+          "shape": [
+            64,
+            2048
+          ],
+          "dtype": "fp32",
+          "direction": "In"
+        }
+      ],
+      "distributed_config": {
+        "device_ids": [
+          0
+        ],
+        "num_sub_workers": 0,
+        "runtime": "tensormap_and_ringbuffer",
+        "aicpu_thread_num": 0
+      },
+      "metadata_sha256": "0d00a189fb7f51d247148dfdeae02c343851c58e32f4185a31c2f4d53a49f8db"
+    },
+    "operators": {
+      "attention": {
+        "roots": [
+          "prefill_attention_slots_inline_prefix512",
+          "prefill_delta_slots_inline_prefix512"
+        ],
+        "abi": {
+          "prefill_attention_slots_inline_prefix512": "queries: pl.Tensor, keys: pl.Tensor, values: pl.Tensor, q_gamma_full: pl.Tensor, k_gamma_full: pl.Tensor, cos_batch: pl.Tensor[[BATCH, ROWS, ROTARY], pl.BF16], sin_batch: pl.Tensor[[BATCH, ROWS, ROTARY], pl.BF16], masks: pl.Tensor, out_weight_full: pl.Tensor, key_pool: pl.Tensor, value_pool: pl.Tensor, block_tables: pl.Tensor, cache_offsets: pl.Tensor, token_counts: pl.Tensor, gated_batch: pl.Tensor, full: pl.Scalar[pl.INDEX], active_count: pl.Scalar[pl.INT32], rk_bank: pl.Tensor, rk_mode: pl.Scalar[pl.INT32], rk_start: pl.Scalar[pl.INT32], rk_clean: pl.Scalar[pl.INT32], rk_end: pl.Scalar[pl.INT32]",
+          "prefill_delta_slots_inline_prefix512": "qkv_batch: pl.Tensor, z_batch: pl.Tensor, a_batch: pl.Tensor, b_batch: pl.Tensor, conv_weight_layer: pl.Tensor, a_log_layer: pl.Tensor, dt_bias_layer: pl.Tensor, delta_norm_layer: pl.Tensor, delta_out_layer: pl.Tensor, conv_states: pl.Tensor, recurrent_states: pl.Tensor, gated_batch: pl.Tensor, linear: pl.Scalar[pl.INDEX], token_counts: pl.Tensor, active_count: pl.Scalar[pl.INT32], rk_windows: pl.Tensor[[48, 144], pl.INT32], rk_core: pl.Tensor, rk_state: pl.Tensor, rk_start: pl.Scalar[pl.INT32], rk_end: pl.Scalar[pl.INT32], rk_mode: pl.Scalar[pl.INT32], rk_offset: pl.Scalar[pl.INT32]"
+        },
+        "symbols": [
+          "attention3_prepare_normalize_head_inline",
+          "attention3_prepare_rotary_head_inline",
+          "delta_prepare_decay_beta_inline",
+          "panel_attention",
+          "prefill_attention_slots_inline_prefix512",
+          "prefill_batched_conv_inline_prefix512",
+          "prefill_delta_slots_inline_prefix512",
+          "prefill_direct_qkv_recurrence_inline",
+          "prefill_gated_tail_inline",
+          "prefill_prepare_heads_inline"
+        ]
+      },
+      "ffn": {
+        "roots": [
+          "redknot_ffn_execute",
+          "redknot_ffn_initialize",
+          "redknot_ffn_prepare"
+        ],
+        "abi": {
+          "redknot_ffn_execute": "do_pack: pl.Scalar[pl.INDEX], post_norm: pl.Tensor, mlp_gate_layer: pl.Tensor[[HIDDEN, INTERMEDIATE], pl.BF16, pl.NZ], prefix: pl.Tensor, mlp_up_layer: pl.Tensor[[HIDDEN, INTERMEDIATE], pl.BF16, pl.NZ], mlp_down_layer: pl.Tensor[[INTERMEDIATE, HIDDEN], pl.BF16, pl.NZ], mlp_output: pl.Tensor, active_count: pl.Scalar[pl.INT32], sparse_mode: pl.Scalar[pl.INDEX], keep: pl.Tensor, residual: pl.Tensor, input_gamma: pl.Tensor, final_gamma: pl.Tensor, running: pl.Tensor, norm: pl.Tensor, traces: pl.Tensor, layer: pl.Scalar[pl.INDEX]",
+          "redknot_ffn_initialize": "cache_offsets: pl.Tensor, token_counts: pl.Tensor, layer: pl.Scalar[pl.INDEX], rk_mode: pl.Scalar[pl.INT32], rk_end: pl.Scalar[pl.INT32], rk_start: pl.Scalar[pl.INT32]",
+          "redknot_ffn_prepare": "layer: pl.Scalar[pl.INDEX], attention: pl.Tensor, keep: pl.Tensor, rk_scores: pl.Tensor, rk_cutoffs: pl.Tensor[[64, 2048], pl.FP32], offset: pl.Scalar[pl.INT32], count: pl.Scalar[pl.INT32], rk_start: pl.Scalar[pl.INT32], rk_end: pl.Scalar[pl.INT32], rk_mode: pl.Scalar[pl.INT32], do_pack: pl.Scalar[pl.INDEX], prefix: pl.Tensor, running: pl.Tensor, post_gamma_layer: pl.Tensor[[1, HIDDEN], pl.FP32], residual: pl.Tensor, post_norm: pl.Tensor"
+        },
+        "symbols": [
+          "mask_ffn_rows",
+          "p30_residual_read_rank",
+          "prefill_up_swiglu_fused",
+          "redknot_ffn_execute",
+          "redknot_ffn_initialize",
+          "redknot_ffn_prepare",
+          "redknot_ffn_selection",
+          "residual_norm_fused_streaming",
+          "residual_norm_packed",
+          "rk_block_prefix",
+          "rk_live_projection",
+          "rk_live_up_swiglu"
+        ]
+      }
+    },
+    "ffn_phases": [
+      "redknot_ffn_execute",
+      "redknot_ffn_initialize",
+      "redknot_ffn_prepare"
+    ]
+  },
+  "prefill_1024": {
+    "spec": {
+      "module": "serving.long_context.qwen27b.prefill_1024",
+      "entrypoint": "prefill_fwd",
+      "original_CID": 7,
+      "parameter_count": 37,
+      "actual_functions": 61,
+      "params": [
+        {
+          "name": "input_ids__ssa_v0",
+          "direction": "In",
+          "shape": [
+            1,
+            1024
+          ],
+          "dtype": "int32",
+          "layout": "ND"
+        },
+        {
+          "name": "embedding__ssa_v0",
+          "direction": "In",
+          "shape": [
+            248320,
+            5120
+          ],
+          "dtype": "bfloat16",
+          "layout": "ND"
+        },
+        {
+          "name": "final_gamma__ssa_v0",
+          "direction": "In",
+          "shape": [
+            1,
+            5120
+          ],
+          "dtype": "fp32",
+          "layout": "ND"
+        },
+        {
+          "name": "lm_head__ssa_v0",
+          "direction": "In",
+          "shape": [
+            248320,
+            5120
+          ],
+          "dtype": "bfloat16",
+          "layout": "ND"
+        },
+        {
+          "name": "input_gamma__ssa_v0",
+          "direction": "In",
+          "shape": [
+            64,
+            5120
+          ],
+          "dtype": "fp32",
+          "layout": "ND"
+        },
+        {
+          "name": "post_gamma__ssa_v0",
+          "direction": "In",
+          "shape": [
+            64,
+            5120
+          ],
+          "dtype": "fp32",
+          "layout": "ND"
+        },
+        {
+          "name": "mlp_gate_weight__ssa_v0",
+          "direction": "In",
+          "shape": [
+            64,
+            1088,
+            320,
+            16,
+            16
+          ],
+          "dtype": "bfloat16",
+          "layout": "NZ"
+        },
+        {
+          "name": "mlp_up_weight__ssa_v0",
+          "direction": "In",
+          "shape": [
+            64,
+            1088,
+            320,
+            16,
+            16
+          ],
+          "dtype": "bfloat16",
+          "layout": "NZ"
+        },
+        {
+          "name": "mlp_down_weight__ssa_v0",
+          "direction": "In",
+          "shape": [
+            64,
+            320,
+            1088,
+            16,
+            16
+          ],
+          "dtype": "bfloat16",
+          "layout": "NZ"
+        },
+        {
+          "name": "delta_qkv_weight__ssa_v0",
+          "direction": "In",
+          "shape": [
+            48,
+            640,
+            320,
+            16,
+            16
+          ],
+          "dtype": "bfloat16",
+          "layout": "NZ"
+        },
+        {
+          "name": "delta_z_weight__ssa_v0",
+          "direction": "In",
+          "shape": [
+            48,
+            384,
+            320,
+            16,
+            16
+          ],
+          "dtype": "bfloat16",
+          "layout": "NZ"
+        },
+        {
+          "name": "delta_a_weight__ssa_v0",
+          "direction": "In",
+          "shape": [
+            48,
+            8,
+            320,
+            16,
+            16
+          ],
+          "dtype": "bfloat16",
+          "layout": "NZ"
+        },
+        {
+          "name": "delta_b_weight__ssa_v0",
+          "direction": "In",
+          "shape": [
+            48,
+            8,
+            320,
+            16,
+            16
+          ],
+          "dtype": "bfloat16",
+          "layout": "NZ"
+        },
+        {
+          "name": "delta_conv_weight__ssa_v0",
+          "direction": "In",
+          "shape": [
+            192,
+            10240
+          ],
+          "dtype": "bfloat16",
+          "layout": "ND"
+        },
+        {
+          "name": "delta_a_log__ssa_v0",
+          "direction": "In",
+          "shape": [
+            48,
+            64
+          ],
+          "dtype": "bfloat16",
+          "layout": "ND"
+        },
+        {
+          "name": "delta_dt_bias__ssa_v0",
+          "direction": "In",
+          "shape": [
+            48,
+            64
+          ],
+          "dtype": "bfloat16",
+          "layout": "ND"
+        },
+        {
+          "name": "delta_norm_weight__ssa_v0",
+          "direction": "In",
+          "shape": [
+            48,
+            128
+          ],
+          "dtype": "bfloat16",
+          "layout": "ND"
+        },
+        {
+          "name": "delta_out_weight__ssa_v0",
+          "direction": "In",
+          "shape": [
+            48,
+            320,
+            384,
+            16,
+            16
+          ],
+          "dtype": "bfloat16",
+          "layout": "NZ"
+        },
+        {
+          "name": "full_q_weight__ssa_v0",
+          "direction": "In",
+          "shape": [
+            16,
+            768,
+            320,
+            16,
+            16
+          ],
+          "dtype": "bfloat16",
+          "layout": "NZ"
+        },
+        {
+          "name": "full_k_weight__ssa_v0",
+          "direction": "In",
+          "shape": [
+            16,
+            64,
+            320,
+            16,
+            16
+          ],
+          "dtype": "bfloat16",
+          "layout": "NZ"
+        },
+        {
+          "name": "full_v_weight__ssa_v0",
+          "direction": "In",
+          "shape": [
+            16,
+            64,
+            320,
+            16,
+            16
+          ],
+          "dtype": "bfloat16",
+          "layout": "NZ"
+        },
+        {
+          "name": "full_q_gamma__ssa_v0",
+          "direction": "In",
+          "shape": [
+            16,
+            256
+          ],
+          "dtype": "fp32",
+          "layout": "ND"
+        },
+        {
+          "name": "full_k_gamma__ssa_v0",
+          "direction": "In",
+          "shape": [
+            16,
+            256
+          ],
+          "dtype": "fp32",
+          "layout": "ND"
+        },
+        {
+          "name": "full_out_weight__ssa_v0",
+          "direction": "In",
+          "shape": [
+            16,
+            320,
+            384,
+            16,
+            16
+          ],
+          "dtype": "bfloat16",
+          "layout": "NZ"
+        },
+        {
+          "name": "cos__ssa_v0",
+          "direction": "In",
+          "shape": [
+            1,
+            1024,
+            64
+          ],
+          "dtype": "bfloat16",
+          "layout": "ND"
+        },
+        {
+          "name": "sin__ssa_v0",
+          "direction": "In",
+          "shape": [
+            1,
+            1024,
+            64
+          ],
+          "dtype": "bfloat16",
+          "layout": "ND"
+        },
+        {
+          "name": "mask__ssa_v0",
+          "direction": "In",
+          "shape": [
+            1,
+            1024,
+            32768
+          ],
+          "dtype": "fp32",
+          "layout": "ND"
+        },
+        {
+          "name": "token_counts__ssa_v0",
+          "direction": "In",
+          "shape": [
+            1
+          ],
+          "dtype": "int32",
+          "layout": "ND"
+        },
+        {
+          "name": "cache_offsets__ssa_v0",
+          "direction": "In",
+          "shape": [
+            1
+          ],
+          "dtype": "int32",
+          "layout": "ND"
+        },
+        {
+          "name": "conv_states__ssa_v0",
+          "direction": "InOut",
+          "shape": [
+            1,
+            48,
+            4,
+            10240
+          ],
+          "dtype": "bfloat16",
+          "layout": "ND"
+        },
+        {
+          "name": "recurrent_states__ssa_v0",
+          "direction": "InOut",
+          "shape": [
+            1,
+            48,
+            48,
+            128,
+            128
+          ],
+          "dtype": "fp32",
+          "layout": "ND"
+        },
+        {
+          "name": "key_pool__ssa_v0",
+          "direction": "InOut",
+          "shape": [
+            16,
+            1,
+            1025,
+            128,
+            256
+          ],
+          "dtype": "bfloat16",
+          "layout": "ND"
+        },
+        {
+          "name": "value_pool__ssa_v0",
+          "direction": "InOut",
+          "shape": [
+            16,
+            1,
+            1025,
+            128,
+            256
+          ],
+          "dtype": "bfloat16",
+          "layout": "ND"
+        },
+        {
+          "name": "block_tables__ssa_v0",
+          "direction": "In",
+          "shape": [
+            1,
+            2048
+          ],
+          "dtype": "int32",
+          "layout": "ND"
+        },
+        {
+          "name": "traces__ssa_v0",
+          "direction": "InOut",
+          "shape": [
+            1,
+            66,
+            1024,
+            5120
+          ],
+          "dtype": "bfloat16",
+          "layout": "ND"
+        },
+        {
+          "name": "logits__ssa_v0",
+          "direction": "InOut",
+          "shape": [
+            1,
+            1024,
+            248320
+          ],
+          "dtype": "bfloat16",
+          "layout": "ND"
+        },
+        {
+          "name": "active_count__ssa_v0",
+          "direction": "In",
+          "shape": null,
+          "dtype": "int32",
+          "layout": null
+        }
+      ],
+      "distributed_config": {
+        "device_ids": [
+          0
+        ],
+        "num_sub_workers": 0,
+        "runtime": "tensormap_and_ringbuffer",
+        "aicpu_thread_num": 0
+      },
+      "metadata_sha256": "0d00a189fb7f51d247148dfdeae02c343851c58e32f4185a31c2f4d53a49f8db"
+    },
+    "operators": {},
+    "ffn_phases": []
+  },
+  "wide_causal": {
+    "spec": {
+      "module": "serving.long_context.qwen27b.wide_causal",
+      "entrypoint": "prefill_fwd",
+      "original_CID": 7,
+      "parameter_count": 46,
+      "actual_functions": 61,
+      "params": [
+        {
+          "name": "input_ids__ssa_v0",
+          "direction": "In",
+          "shape": [
+            1,
+            1024
+          ],
+          "dtype": "int32",
+          "layout": "ND"
+        },
+        {
+          "name": "embedding__ssa_v0",
+          "direction": "In",
+          "shape": [
+            248320,
+            5120
+          ],
+          "dtype": "bfloat16",
+          "layout": "ND"
+        },
+        {
+          "name": "final_gamma__ssa_v0",
+          "direction": "In",
+          "shape": [
+            1,
+            5120
+          ],
+          "dtype": "fp32",
+          "layout": "ND"
+        },
+        {
+          "name": "lm_head__ssa_v0",
+          "direction": "In",
+          "shape": [
+            248320,
+            5120
+          ],
+          "dtype": "bfloat16",
+          "layout": "ND"
+        },
+        {
+          "name": "input_gamma__ssa_v0",
+          "direction": "In",
+          "shape": [
+            64,
+            5120
+          ],
+          "dtype": "fp32",
+          "layout": "ND"
+        },
+        {
+          "name": "post_gamma__ssa_v0",
+          "direction": "In",
+          "shape": [
+            64,
+            5120
+          ],
+          "dtype": "fp32",
+          "layout": "ND"
+        },
+        {
+          "name": "mlp_gate_weight__ssa_v0",
+          "direction": "In",
+          "shape": [
+            64,
+            1088,
+            320,
+            16,
+            16
+          ],
+          "dtype": "bfloat16",
+          "layout": "NZ"
+        },
+        {
+          "name": "mlp_up_weight__ssa_v0",
+          "direction": "In",
+          "shape": [
+            64,
+            1088,
+            320,
+            16,
+            16
+          ],
+          "dtype": "bfloat16",
+          "layout": "NZ"
+        },
+        {
+          "name": "mlp_down_weight__ssa_v0",
+          "direction": "In",
+          "shape": [
+            64,
+            320,
+            1088,
+            16,
+            16
+          ],
+          "dtype": "bfloat16",
+          "layout": "NZ"
+        },
+        {
+          "name": "delta_qkv_weight__ssa_v0",
+          "direction": "In",
+          "shape": [
+            48,
+            640,
+            320,
+            16,
+            16
+          ],
+          "dtype": "bfloat16",
+          "layout": "NZ"
+        },
+        {
+          "name": "delta_z_weight__ssa_v0",
+          "direction": "In",
+          "shape": [
+            48,
+            384,
+            320,
+            16,
+            16
+          ],
+          "dtype": "bfloat16",
+          "layout": "NZ"
+        },
+        {
+          "name": "delta_a_weight__ssa_v0",
+          "direction": "In",
+          "shape": [
+            48,
+            8,
+            320,
+            16,
+            16
+          ],
+          "dtype": "bfloat16",
+          "layout": "NZ"
+        },
+        {
+          "name": "delta_b_weight__ssa_v0",
+          "direction": "In",
+          "shape": [
+            48,
+            8,
+            320,
+            16,
+            16
+          ],
+          "dtype": "bfloat16",
+          "layout": "NZ"
+        },
+        {
+          "name": "delta_conv_weight__ssa_v0",
+          "direction": "In",
+          "shape": [
+            192,
+            10240
+          ],
+          "dtype": "bfloat16",
+          "layout": "ND"
+        },
+        {
+          "name": "delta_a_log__ssa_v0",
+          "direction": "In",
+          "shape": [
+            48,
+            64
+          ],
+          "dtype": "bfloat16",
+          "layout": "ND"
+        },
+        {
+          "name": "delta_dt_bias__ssa_v0",
+          "direction": "In",
+          "shape": [
+            48,
+            64
+          ],
+          "dtype": "bfloat16",
+          "layout": "ND"
+        },
+        {
+          "name": "delta_norm_weight__ssa_v0",
+          "direction": "In",
+          "shape": [
+            48,
+            128
+          ],
+          "dtype": "bfloat16",
+          "layout": "ND"
+        },
+        {
+          "name": "delta_out_weight__ssa_v0",
+          "direction": "In",
+          "shape": [
+            48,
+            320,
+            384,
+            16,
+            16
+          ],
+          "dtype": "bfloat16",
+          "layout": "NZ"
+        },
+        {
+          "name": "full_q_weight__ssa_v0",
+          "direction": "In",
+          "shape": [
+            16,
+            768,
+            320,
+            16,
+            16
+          ],
+          "dtype": "bfloat16",
+          "layout": "NZ"
+        },
+        {
+          "name": "full_k_weight__ssa_v0",
+          "direction": "In",
+          "shape": [
+            16,
+            64,
+            320,
+            16,
+            16
+          ],
+          "dtype": "bfloat16",
+          "layout": "NZ"
+        },
+        {
+          "name": "full_v_weight__ssa_v0",
+          "direction": "In",
+          "shape": [
+            16,
+            64,
+            320,
+            16,
+            16
+          ],
+          "dtype": "bfloat16",
+          "layout": "NZ"
+        },
+        {
+          "name": "full_q_gamma__ssa_v0",
+          "direction": "In",
+          "shape": [
+            16,
+            256
+          ],
+          "dtype": "fp32",
+          "layout": "ND"
+        },
+        {
+          "name": "full_k_gamma__ssa_v0",
+          "direction": "In",
+          "shape": [
+            16,
+            256
+          ],
+          "dtype": "fp32",
+          "layout": "ND"
+        },
+        {
+          "name": "full_out_weight__ssa_v0",
+          "direction": "In",
+          "shape": [
+            16,
+            320,
+            384,
+            16,
+            16
+          ],
+          "dtype": "bfloat16",
+          "layout": "NZ"
+        },
+        {
+          "name": "cos__ssa_v0",
+          "direction": "In",
+          "shape": [
+            1,
+            1024,
+            64
+          ],
+          "dtype": "bfloat16",
+          "layout": "ND"
+        },
+        {
+          "name": "sin__ssa_v0",
+          "direction": "In",
+          "shape": [
+            1,
+            1024,
+            64
+          ],
+          "dtype": "bfloat16",
+          "layout": "ND"
+        },
+        {
+          "name": "token_counts__ssa_v0",
+          "direction": "In",
+          "shape": [
+            1
+          ],
+          "dtype": "int32",
+          "layout": "ND"
+        },
+        {
+          "name": "cache_offsets__ssa_v0",
+          "direction": "In",
+          "shape": [
+            1
+          ],
+          "dtype": "int32",
+          "layout": "ND"
+        },
+        {
+          "name": "conv_states__ssa_v0",
+          "direction": "InOut",
+          "shape": [
+            1,
+            48,
+            4,
+            10240
+          ],
+          "dtype": "bfloat16",
+          "layout": "ND"
+        },
+        {
+          "name": "recurrent_states__ssa_v0",
+          "direction": "InOut",
+          "shape": [
+            1,
+            48,
+            48,
+            128,
+            128
+          ],
+          "dtype": "fp32",
+          "layout": "ND"
+        },
+        {
+          "name": "key_pool__ssa_v0",
+          "direction": "InOut",
+          "shape": [
+            16,
+            1,
+            1025,
+            128,
+            256
+          ],
+          "dtype": "bfloat16",
+          "layout": "ND"
+        },
+        {
+          "name": "value_pool__ssa_v0",
+          "direction": "InOut",
+          "shape": [
+            16,
+            1,
+            1025,
+            128,
+            256
+          ],
+          "dtype": "bfloat16",
+          "layout": "ND"
+        },
+        {
+          "name": "block_tables__ssa_v0",
+          "direction": "In",
+          "shape": [
+            1,
+            2048
+          ],
+          "dtype": "int32",
+          "layout": "ND"
+        },
+        {
+          "name": "traces__ssa_v0",
+          "direction": "InOut",
+          "shape": [
+            1,
+            66,
+            1024,
+            5120
+          ],
+          "dtype": "bfloat16",
+          "layout": "ND"
+        },
+        {
+          "name": "logits__ssa_v0",
+          "direction": "InOut",
+          "shape": [
+            1,
+            1024,
+            248320
+          ],
+          "dtype": "bfloat16",
+          "layout": "ND"
+        },
+        {
+          "name": "active_count__ssa_v0",
+          "direction": "In",
+          "shape": null,
+          "dtype": "int32",
+          "layout": null
+        },
+        {
+          "name": "rk_bank",
+          "shape": [
+            32768,
+            4096
+          ],
+          "dtype": "bfloat16",
+          "direction": "InOut"
+        },
+        {
+          "name": "rk_mode",
+          "shape": null,
+          "dtype": "int32",
+          "direction": "In"
+        },
+        {
+          "name": "rk_start",
+          "shape": null,
+          "dtype": "int32",
+          "direction": "In"
+        },
+        {
+          "name": "rk_clean",
+          "shape": null,
+          "dtype": "int32",
+          "direction": "In"
+        },
+        {
+          "name": "rk_end",
+          "shape": null,
+          "dtype": "int32",
+          "direction": "In"
+        },
+        {
+          "name": "rk_windows",
+          "shape": [
+            48,
+            144
+          ],
+          "dtype": "int32",
+          "direction": "In"
+        },
+        {
+          "name": "rk_core",
+          "shape": [
+            1550336,
+            128
+          ],
+          "dtype": "bfloat16",
+          "direction": "InOut"
+        },
+        {
+          "name": "rk_state",
+          "shape": [
+            149376,
+            128
+          ],
+          "dtype": "fp32",
+          "direction": "InOut"
+        },
+        {
+          "name": "rk_scores",
+          "shape": [
+            64,
+            2048
+          ],
+          "dtype": "fp32",
+          "direction": "InOut"
+        },
+        {
+          "name": "rk_cutoffs",
+          "shape": [
+            64,
+            2048
+          ],
+          "dtype": "fp32",
+          "direction": "In"
+        }
+      ],
+      "distributed_config": {
+        "device_ids": [
+          0
+        ],
+        "num_sub_workers": 0,
+        "runtime": "tensormap_and_ringbuffer",
+        "aicpu_thread_num": 0
+      },
+      "metadata_sha256": "0d00a189fb7f51d247148dfdeae02c343851c58e32f4185a31c2f4d53a49f8db"
+    },
+    "operators": {
+      "attention": {
+        "roots": [
+          "prefill_attention_slots_inline_prefix512",
+          "prefill_delta_slots_inline_prefix512"
+        ],
+        "abi": {
+          "prefill_attention_slots_inline_prefix512": "queries: pl.Tensor, keys: pl.Tensor, values: pl.Tensor, q_gamma_full: pl.Tensor, k_gamma_full: pl.Tensor, cos_batch: pl.Tensor[[BATCH, ROWS, ROTARY], pl.BF16], sin_batch: pl.Tensor[[BATCH, ROWS, ROTARY], pl.BF16], masks: pl.Tensor, out_weight_full: pl.Tensor, key_pool: pl.Tensor, value_pool: pl.Tensor, block_tables: pl.Tensor, cache_offsets: pl.Tensor, token_counts: pl.Tensor, gated_batch: pl.Tensor, full: pl.Scalar[pl.INDEX], active_count: pl.Scalar[pl.INT32], rk_bank: pl.Tensor, rk_mode: pl.Scalar[pl.INT32], rk_start: pl.Scalar[pl.INT32], rk_clean: pl.Scalar[pl.INT32], rk_end: pl.Scalar[pl.INT32]",
+          "prefill_delta_slots_inline_prefix512": "qkv_batch: pl.Tensor, z_batch: pl.Tensor, a_batch: pl.Tensor, b_batch: pl.Tensor, conv_weight_layer: pl.Tensor, a_log_layer: pl.Tensor, dt_bias_layer: pl.Tensor, delta_norm_layer: pl.Tensor, delta_out_layer: pl.Tensor, conv_states: pl.Tensor, recurrent_states: pl.Tensor, gated_batch: pl.Tensor, linear: pl.Scalar[pl.INDEX], token_counts: pl.Tensor, active_count: pl.Scalar[pl.INT32], rk_windows: pl.Tensor[[48, 144], pl.INT32], rk_core: pl.Tensor, rk_state: pl.Tensor, rk_start: pl.Scalar[pl.INT32], rk_end: pl.Scalar[pl.INT32], rk_mode: pl.Scalar[pl.INT32], rk_offset: pl.Scalar[pl.INT32]"
+        },
+        "symbols": [
+          "attention3_prepare_normalize_head_inline",
+          "attention3_prepare_rotary_head_inline",
+          "delta_prepare_decay_beta_inline",
+          "panel_attention",
+          "prefill_attention_slots_inline_prefix512",
+          "prefill_batched_conv_inline_prefix512",
+          "prefill_delta_slots_inline_prefix512",
+          "prefill_direct_qkv_recurrence_inline",
+          "prefill_gated_tail_inline",
+          "prefill_prepare_heads_inline"
+        ]
+      },
+      "ffn": {
+        "roots": [
+          "redknot_ffn_execute",
+          "redknot_ffn_initialize",
+          "redknot_ffn_prepare"
+        ],
+        "abi": {
+          "redknot_ffn_execute": "do_pack: pl.Scalar[pl.INDEX], post_norm: pl.Tensor, mlp_gate_layer: pl.Tensor[[HIDDEN, INTERMEDIATE], pl.BF16, pl.NZ], prefix: pl.Tensor, mlp_up_layer: pl.Tensor[[HIDDEN, INTERMEDIATE], pl.BF16, pl.NZ], mlp_down_layer: pl.Tensor[[INTERMEDIATE, HIDDEN], pl.BF16, pl.NZ], mlp_output: pl.Tensor, active_count: pl.Scalar[pl.INT32], sparse_mode: pl.Scalar[pl.INDEX], keep: pl.Tensor, residual: pl.Tensor, input_gamma: pl.Tensor, final_gamma: pl.Tensor, running: pl.Tensor, norm: pl.Tensor, traces: pl.Tensor, layer: pl.Scalar[pl.INDEX]",
+          "redknot_ffn_initialize": "cache_offsets: pl.Tensor, token_counts: pl.Tensor, layer: pl.Scalar[pl.INDEX], rk_mode: pl.Scalar[pl.INT32], rk_end: pl.Scalar[pl.INT32], rk_start: pl.Scalar[pl.INT32]",
+          "redknot_ffn_prepare": "layer: pl.Scalar[pl.INDEX], attention: pl.Tensor, keep: pl.Tensor, rk_scores: pl.Tensor, rk_cutoffs: pl.Tensor[[64, 2048], pl.FP32], offset: pl.Scalar[pl.INT32], count: pl.Scalar[pl.INT32], rk_start: pl.Scalar[pl.INT32], rk_end: pl.Scalar[pl.INT32], rk_mode: pl.Scalar[pl.INT32], do_pack: pl.Scalar[pl.INDEX], prefix: pl.Tensor, running: pl.Tensor, post_gamma_layer: pl.Tensor[[1, HIDDEN], pl.FP32], residual: pl.Tensor, post_norm: pl.Tensor"
+        },
+        "symbols": [
+          "mask_ffn_rows",
+          "p30_residual_read_rank",
+          "prefill_up_swiglu_fused",
+          "redknot_ffn_execute",
+          "redknot_ffn_initialize",
+          "redknot_ffn_prepare",
+          "redknot_ffn_selection",
+          "residual_norm_fused_streaming",
+          "residual_norm_packed",
+          "rk_block_prefix",
+          "rk_live_projection",
+          "rk_live_up_swiglu"
+        ]
+      }
+    },
+    "ffn_phases": [
+      "redknot_ffn_execute",
+      "redknot_ffn_initialize",
+      "redknot_ffn_prepare"
+    ]
+  }
+}
