@@ -20,4 +20,3 @@ The plugin keeps sparse_ffn=true/false. Inference ownership and the effective pa
 The frozen six-case, same-card serial experiment measured P40b / I2 reuse TTFT of 1.532 / 1.499 s and restore latency of 91.3 / 95.5 ms. It did not reproduce the previous extra 400 ms. 59 of 60 complete logits vectors were bitwise identical; the known zstd safe reuse difference remains unresolved. These are short-output timing/logit checks, not full-answer accuracy evaluation.
 
 CPU ABI, frozen-function and page-lifecycle checks are shipped with the compatible provider. Raw NPU evidence, source hashes, per-case results and version history are indexed in the Muyuan benchmark report. No new model math is introduced by this repository publication.
-
