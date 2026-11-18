@@ -4,6 +4,8 @@ from __future__ import annotations
 from dataclasses import dataclass
 import os
 
+from .operator_interfaces import LegacyHeadPagePolicy
+
 
 @dataclass(frozen=True)
 class KVLayout:
@@ -57,7 +59,7 @@ class KVLayout:
 
 
 class HeadPageAllocator:
-    def __init__(self, layout, policy):
+    def __init__(self, layout, policy: LegacyHeadPagePolicy):
         self.layout, self.policy = layout, policy
         self.request_id = None
 

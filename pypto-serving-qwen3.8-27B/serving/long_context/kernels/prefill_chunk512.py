@@ -798,8 +798,10 @@ def prefill_batch_prefix512_inline(input_ids: pl.Tensor, embedding: pl.Tensor, f
         mlp_gate_layer: pl.Tensor[[HIDDEN, INTERMEDIATE], pl.BF16, pl.NZ] = mlp_gate_weight[layer]
         mlp_up_layer: pl.Tensor[[HIDDEN, INTERMEDIATE], pl.BF16, pl.NZ] = mlp_up_weight[layer]
         mlp_down_layer: pl.Tensor[[INTERMEDIATE, HIDDEN], pl.BF16, pl.NZ] = mlp_down_weight[layer]
+        # operator: initialize
         residual = pl.create_tensor([512, HIDDEN], dtype=pl.BF16)
         post_norm = pl.create_tensor([512, HIDDEN], dtype=pl.BF16)
+        # end operator: initialize
         if layer % 4 < 3:
             linear = layer - layer // 4
             qkv_weight_layer: pl.Tensor[[HIDDEN, QKV], pl.BF16, pl.NZ] = delta_qkv_weight[linear]
@@ -823,7 +825,9 @@ def prefill_batch_prefix512_inline(input_ids: pl.Tensor, embedding: pl.Tensor, f
             prefill_delta_slots_inline_prefix512(qkv, z, a, b, conv_weight_layer, a_log_layer, dt_bias_layer, delta_norm_layer, delta_out_layer, conv_states, recurrent_states, gated, linear, token_counts, active_count)
             attention = pl.create_tensor([512, HIDDEN], dtype=pl.BF16)
             attention = prefill_project_ffn_up_paired_m128(gated, delta_out_layer, attention, active_count)
+            # operator: prepare
             residual, post_norm = residual_norm_fused_streaming(running, attention, post_gamma_layer, residual, post_norm)
+            # end operator: prepare
         else:
             full = layer // 4
             q_weight_full: pl.Tensor[[HIDDEN, FULL_Q_PROJECTION], pl.BF16, pl.NZ] = full_q_weight[full]
@@ -842,7 +846,10 @@ def prefill_batch_prefix512_inline(input_ids: pl.Tensor, embedding: pl.Tensor, f
             prefill_attention_slots_inline_prefix512(q, k, v, q_gamma_full, k_gamma_full, cos, sin, mask, out_weight_full, key_pool, value_pool, block_tables, cache_offsets, token_counts, gated, full, active_count)
             attention = pl.create_tensor([512, HIDDEN], dtype=pl.BF16)
             attention = prefill_project_ffn_up_paired_m128(gated, out_weight_full, attention, active_count)
+            # operator: prepare
             residual, post_norm = residual_norm_fused_streaming(running, attention, post_gamma_layer, residual, post_norm)
+            # end operator: prepare
+        # operator: execute
         mlp_gate = pl.create_tensor([512, INTERMEDIATE], dtype=pl.BF16)
         mlp_gate = prefill_project_ffn_up_paired_m128(post_norm, mlp_gate_layer, mlp_gate, active_count)
         middle = pl.create_tensor([512, INTERMEDIATE], dtype=pl.BF16)
@@ -850,6 +857,7 @@ def prefill_batch_prefix512_inline(input_ids: pl.Tensor, embedding: pl.Tensor, f
         mlp_output = pl.create_tensor([512, HIDDEN], dtype=pl.BF16)
         mlp_output = prefill_project_ffn_up_paired_m128(middle, mlp_down_layer, mlp_output, active_count)
         running, norm, traces = residual_next_norm_trace(residual, mlp_output, input_gamma, final_gamma, running, norm, traces, layer, active_count)
+        # end operator: execute
     normalized = norm
     logits_rows = pl.reshape(logits, [PACKED, VOCAB])
     prefill_last_logits_inline_prefix512(normalized, lm_head, logits_rows, token_counts, active_count)

@@ -69,6 +69,16 @@ class ModelRunner(base.ModelRunner):
     def configure_extensions(self, extensions):
         if self.worker is not None:
             raise RuntimeError('Model extensions must be selected before startup')
+        from .native_page_compiler import FAMILY as NATIVE_PAGE_FAMILY, NativePageLayout
+        if extensions.family == NATIVE_PAGE_FAMILY:
+            self.model_extensions = extensions
+            self.kv_layout = NativePageLayout.for_model()
+            self.provenance['operator_interface'] = {
+                'family': extensions.family, 'network_owner': 'serving', 'kv_owner': 'serving',
+                'context': CONTEXT, 'physical_pages': POOL_BLOCKS, 'page_tokens': BLOCK_SIZE,
+                'sparse_ffn': extensions.ffn.enabled,
+            }
+            return
         from .head_page_allocator import KVLayout, HeadPageAllocator
         self.model_extensions = extensions
         self.kv_layout = KVLayout.from_environment()
@@ -97,7 +107,7 @@ class ModelRunner(base.ModelRunner):
         return result
 
     def load_programs(self):
-        if self.model_extensions is not None:
+        if self.page_allocator is not None:
             from .interface_compiler import InterfaceCompiler
             self.interface_compiler = InterfaceCompiler(self.model_extensions, self.kv_layout, self.config)
             self.graph_specs, self.programs = {}, {}
@@ -117,7 +127,13 @@ class ModelRunner(base.ModelRunner):
         if self.enable_mixed_prefill:
             names += ['prefill_single128', 'mixed_ffn']
         self.programs = {n: compile_graph(n, self.graph_specs, self.config) for n in names}
-        return names
+        if self.model_extensions is not None:
+            from .native_page_compiler import NativePageCompiler
+            self.interface_compiler = NativePageCompiler(self.model_extensions, self.kv_layout, self.config)
+            for role in self.model_extensions.roles:
+                spec, program = self.interface_compiler.load(role)
+                self.graph_specs[role], self.programs[role] = spec, program
+        return list(self.programs)
 
     def additional_host_buffers(self):
         return ()
@@ -141,6 +157,16 @@ class ModelRunner(base.ModelRunner):
             raise ValueError('Invalid RoPE table')
         self.host_fields = {n: self._host_fields(self.graph_specs[n]) for n in names
                             if n.startswith('prefill_') or n == 'decode_greedy'}
+        buffer_specs = {n: self.graph_specs[n] for n in self.host_fields}
+        if 'wide_causal' in names and 'prefill_1024' not in buffer_specs:
+            # Wide hits need wide input/output buffers; misses keep the native P512 cadence.
+            from copy import deepcopy
+            spec = deepcopy(self.graph_specs['wide_causal'])
+            mask = deepcopy(self.graph_specs['prefill_chunk512']['params'][26])
+            mask['shape'][1] = 1024
+            spec['params'].insert(26, mask)
+            buffer_specs['prefill_1024'] = spec
+            self.host_fields['prefill_1024'] = self._host_fields(spec)
         for name, tensor in self.host_fields['decode_greedy'].items():
             setattr(self, 'decode_' + name, tensor)
         self.local_plan_tensor = torch.full((12, 3), -1, dtype=torch.int32).share_memory_()
@@ -177,10 +203,10 @@ class ModelRunner(base.ModelRunner):
             self.outputs = {}
             widest = max(self.host_fields, key=lambda name: self.host_fields[name]['ids'].shape[1])
             owners = [self._alloc(p['shape'], DTYPES[p['dtype']])
-                      for p in self.graph_specs[widest]['params'][34:36]]
-            for name in names:
+                      for p in buffer_specs[widest]['params'][34:36]]
+            for name, spec in buffer_specs.items():
                 if name.startswith('prefill_') or name == 'decode_greedy':
-                    params = self.graph_specs[name]['params'][34:36]
+                    params = spec['params'][34:36]
                     views = tuple(DeviceTensor(owner.data_ptr, tuple(param['shape']), owner.dtype, buffer=owner.buffer)
                                   for owner, param in zip(owners, params, strict=True))
                     if any(view.nbytes > owner.nbytes for view, owner in zip(views, owners, strict=True)):
@@ -226,7 +252,7 @@ class ModelRunner(base.ModelRunner):
         if self.async281 is not None:
             self.async281.cancel('admit')
         if self.page_allocator is not None:
-            end = self.model_extensions.attention.full_history_end(request, self.scheduler)
+            end = self.page_allocator.policy.full_history_end(request, self.scheduler)
             self.page_allocator.reset(request.request_id, end)
         return super().admit(request)
 

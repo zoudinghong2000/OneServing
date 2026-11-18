@@ -107,10 +107,12 @@ def validate_operators(fragment, contract, role, kind):
 
 
 class InterfaceCompiler:
+    family = ABI
+
     def __init__(self, extensions, layout, config):
-        if extensions.family != ABI:
+        if extensions.family != self.family:
             raise ValueError("Unsupported operator model family: " + extensions.family)
-        if (layout.context, layout.page_tokens, layout.head_classes, layout.full_layers, layout.head_dim) != (32768, 128, 4, 16, 256):
+        if extensions.family == ABI and (layout.context, layout.page_tokens, layout.head_classes, layout.full_layers, layout.head_dim) != (32768, 128, 4, 16, 256):
             raise ValueError("The current serving model family supports 32K context and its declared head geometry")
         self.extensions, self.layout, self.config = extensions, layout, config
         self.contracts = json.loads((FAMILY / "manifest.json").read_text())
@@ -150,7 +152,7 @@ class InterfaceCompiler:
                 versions[name] = importlib.metadata.version(name)
             except importlib.metadata.PackageNotFoundError:
                 versions[name] = "unpackaged"
-        identity = {"abi": ABI, "source": source, "spec": spec, "versions": versions,
+        identity = {"abi": self.extensions.family, "source": source, "spec": spec, "versions": versions,
                     "config": str(self.config), "build": build_identity()}
         digest = hashlib.sha256(json.dumps(identity, sort_keys=True).encode()).hexdigest()
         root = os.environ.get("ONESERVING_COMPILE_CACHE")
@@ -182,7 +184,7 @@ class InterfaceCompiler:
                     shutil.copytree(program.output_dir, publish / "program")
                     (publish / "sha256").write_text(tree_hash(publish / "program"))
                     (publish / "identity.json").write_text(json.dumps(
-                        {"abi": ABI, "role": role, "key": digest,
+                        {"abi": self.extensions.family, "role": role, "key": digest,
                          "kv_pages": self.layout.physical_pages, "versions": versions}, indent=2))
                     try:
                         publish.rename(cache)
